@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html ng-app="App">
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="Scripts/angular.js"></script>
+    <script>
+        var url= "api/FAQ/"
+        angular.module("App", [])
+        .controller("faqController", function ($scope,$http) {
+            $scope.faqs = $http.get(url)
+                .success(alert("ok")).error(alert("error"));
+        })
+    </script>
+</head>
+<body >
+    <div ng-controller="faqController">
+        <ul>
+            <li ng-repeat="faq in faqs">
+                {{faq.}}
+            </li>
+        </ul>
+    </div >
+</body>
+</html>

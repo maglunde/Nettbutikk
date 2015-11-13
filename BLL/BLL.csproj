@@ -46,6 +46,8 @@
     <Compile Include="Category\ICategoryLogic.cs" />
     <Compile Include="Customer\CustomerBLL.cs" />
     <Compile Include="Customer\ICustomerLogic.cs" />
+    <Compile Include="FAQ\IFAQLogic.cs" />
+    <Compile Include="FAQ\FAQBLL.cs" />
     <Compile Include="Image\IImageLogic.cs" />
     <Compile Include="Image\ImageBLL.cs" />
     <Compile Include="Order\IOrderLogic.cs" />

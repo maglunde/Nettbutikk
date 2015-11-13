@@ -141,11 +141,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
+    <Compile Include="Controllers\FAQController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -157,6 +159,10 @@
     <Compile Include="Migrations\201511082038219_InitialMigrations.cs" />
     <Compile Include="Migrations\201511082038219_InitialMigrations.Designer.cs">
       <DependentUpon>201511082038219_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511131233038_FAQ.cs" />
+    <Compile Include="Migrations\201511131233038_FAQ.Designer.cs">
+      <DependentUpon>201511131233038_FAQ.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Viewmodels\CartItem.cs" />
@@ -174,6 +180,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="faq.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -294,6 +301,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511082038219_InitialMigrations.resx">
       <DependentUpon>201511082038219_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511131233038_FAQ.resx">
+      <DependentUpon>201511131233038_FAQ.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

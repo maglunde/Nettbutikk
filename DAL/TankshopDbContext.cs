@@ -41,6 +41,11 @@ namespace Nettbutikk.Model
         public virtual DbSet<OldProduct> OldProducts { get; set; }
         public virtual DbSet<OldOrderline> OldOrderLines { get; set; }
 
+        // FAQ
+        public virtual DbSet<FAQCategory> FAQCategories { get; set; }
+        public virtual DbSet<FAQ> FAQs { get; set; }
+        public virtual DbSet<UserQuestion> UserQuestions { get; set; }
+
     }
 
     public class Customer
@@ -239,6 +244,42 @@ namespace Nettbutikk.Model
         //public virtual Product Product { get; set; }
         //public virtual Order Order{ get; set; }
         public virtual Admin Admin { get; set; }
+    }
+
+
+    //  FAQ
+
+    public class FAQCategory
+    {
+        public FAQCategory()
+        {
+            this.Questions = new List<FAQ>();
+        }
+        [Key]
+        public int FAQCategoryId { get; set; }
+        public string Name { get; set; }
+
+        public virtual List<FAQ> Questions { get; set;}
+    }
+
+    public class FAQ
+    {
+        [Key]
+        public int FAQId { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
+
+        public virtual FAQCategory FAQCategory { get; set; }
+    }
+
+    public class UserQuestion
+    {
+        [Key]
+        public int QuestionId { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public string Email { get; set; }
+        public DateTime Date { get; set; }
     }
 
 }

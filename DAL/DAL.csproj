@@ -84,6 +84,8 @@
     <Compile Include="Customer\CustomerRepo.cs" />
     <Compile Include="Customer\CustomerRepoStub.cs" />
     <Compile Include="Customer\ICustomerRepo.cs" />
+    <Compile Include="FAQ\FAQRepo.cs" />
+    <Compile Include="FAQ\IFAQRepo.cs" />
     <Compile Include="Image\IImageRepo.cs" />
     <Compile Include="Image\ImageRepo.cs" />
     <Compile Include="Image\ImageRepoStub.cs" />
