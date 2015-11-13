@@ -23,13 +23,14 @@ namespace DAL.FAQ
         {
             using (var db = new TankshopDbContext())
             {
-                var dbFaqs = db.FAQs.ToList();
+                var dbFaqs = db.FAQs.ToList() ;
                 var faqs = new List<FAQModel>();
 
                 foreach(var dbFaq in dbFaqs)
                 {
                     var faq = new FAQModel()
                     {
+                        Id  = dbFaq.FAQId,
                         Question = dbFaq.Question,
                         Answer = dbFaq.Answer,
                         CategoryId = dbFaq.FAQCategory.FAQCategoryId,

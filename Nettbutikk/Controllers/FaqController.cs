@@ -19,11 +19,13 @@ namespace Nettbutikk.Controllers
         }
 
         // GET api/<controller>
+        //public List<FAQModel> Get()
         public HttpResponseMessage Get()
         {
             var FAQs = _faqBLL.GetAllFAQs();
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, FAQs);
             return response;
+            //return FAQs;
         }
 
         // GET api/<controller>/5
