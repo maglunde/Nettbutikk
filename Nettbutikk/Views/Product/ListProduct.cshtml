@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Nettbutikk.Viewmodels.ProductView>
+    @using Nettbutikk.Viewmodels
+    @{ 
+        List<ProductView> Products = ViewBag.Products;
+    }
+
+<p>
+    @Html.ActionLink("Create New", "CreateProduct")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Images.FirstOrDefault().ImageUrl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var product in Products)
+{
+    <tr>
+        <td>
+            @product.ProductName
+        </td>
+        <td>
+            @string.Format("{0:n}", product.Price) kr
+        </td>
+        <td>
+            @product.Stock
+        </td>
+        <td>
+            @{
+                string description = product.Description.Length >= 20 ? product.Description.Substring(0, 20) + "..." : product.Description;
+            }
+
+            @description
+        </td>
+        <td>
+            @{ 
+                var image = product.Images.FirstOrDefault() ?? null;
+                string url = "";
+                if (image != null)
+                {
+                    url = product.Images.FirstOrDefault().ImageUrl .Length >= 20 ? product.Images.FirstOrDefault().ImageUrl.Substring(0, 20) + "..." : product.Images.FirstOrDefault().ImageUrl;
+                }
+                @url
+            }
+
+        </td>
+        <td>
+            @product.CategoryName
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditProduct", new { ProductId = product.ProductId }) |
+            @Html.ActionLink("Delete", "DeleteProduct", new { ProductId = product.ProductId })
+        </td>
+    </tr>
+}
+
+</table>

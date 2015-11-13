@@ -1,0 +1,237 @@
+﻿@model Nettbutikk.Viewmodels.CustomerRegisterPartial
+<div id="RegisterModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Registrer deg her</h2></div>
+            <div class="modal-body table" style="overflow:hidden;">
+                <span id="messageRegister" style="color:red"></span>
+                <table class="table-modal">
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Email)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Email)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                        <td>
+                            <div class="emailValidityIcon glyphicon "> </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Password)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Password)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.RepeatPassword)</td>
+                        <td>
+                            @Html.EditorFor(model => model.RepeatPassword)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Firstname)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Firstname)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Lastname)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Lastname)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Address)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Address)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Zipcode)</td>
+                        <td>
+                            @Html.EditorFor(model => model.Zipcode)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.City)</td>
+                        <td>
+                            @Html.EditorFor(model => model.City)
+                            <span class="val-error text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><button class="btn btn-danger" data-dismiss="modal">Avbryt</button></td>
+                        <td><button id="btnRegister" type="button" class="btn btn-success" value="Registrer">Registrer</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/jquery")
+<script>
+    $(document).ready(function () {
+
+
+        $("#RegisterModal .table-modal input").on("blur", function () {
+            var val = $(this).val();
+            if (val === "") {
+                var valErrMsg = $(this).attr("data-val-required");
+                $(this).closest("tr").find(".val-error").text(valErrMsg);
+            } else {
+                $(this).closest("tr").find(".val-error").text("");
+                $(this).removeClass("input-error");
+            }
+
+        })
+
+        $("#RegisterModal #Email").on("blur", function () {
+            var input = $(this);
+            var email = input.val();
+            var validityIcon = input.closest("tr").find(".emailValidityIcon");
+            var regBtn = $("#btnRegister");
+
+            if (email === "")
+            {
+                validityIcon.removeClass("glyphicon-ok-circle emailValidityOK").addClass("glyphicon-ban-circle emailValidityERROR");
+                input.closest("tr").find(".val-error").text("Epostadressen er allerede registreret");
+                regBtn.attr("disabled", true);
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("ExisitingEmail", "Customer")',
+                data: { Email: email },
+                success: function (result) {
+                    if (result === "True") // Email already in database
+                    {
+                        validityIcon.removeClass("glyphicon-ok-circle emailValidityOK").addClass("glyphicon-ban-circle emailValidityERROR");
+                        input.closest("tr").find(".val-error").text("Epostadressen er allerede registreret");
+                        regBtn.attr("disabled", true);
+
+                    } else // Email avaliable
+                    {
+                        validityIcon.removeClass("glyphicon-ban-circle emailValidityERROR").addClass("glyphicon-ok-circle emailValidityOK");
+                        regBtn.attr("disabled", false);
+                    }
+                }
+
+            })
+
+
+
+            console.log(email); return;
+
+        })
+
+        $("#RegisterModal #RepeatPassword").on("keyup blur", function () {
+            var pw = $("#RegisterModal #Password").val();
+            var rep = $("#RegisterModal #RepeatPassword").val();
+
+            if (rep === "") {
+                var valErrMsg = $(this).attr("data-val-required");
+                $(this).closest("tr").find(".val-error").text(valErrMsg);
+            }
+            else if (pw !== rep) {
+                var valErrMsg = $(this).attr("data-val-equalto");
+                $(this).closest("tr").find(".val-error").text(valErrMsg);
+            } else {
+                $(this).closest("tr").find(".val-error").text("");
+            }
+        })
+
+
+
+        $("#btnRegister").click(function () {
+
+            var email = $("#RegisterModal #Email").val();
+            var password = $("#RegisterModal #Password").val();
+            var repeatPassword = $("#RegisterModal #RepeatPassword").val();
+            var firstname = $("#RegisterModal #Firstname").val();
+            var lastname = $("#RegisterModal #Lastname").val();
+            var address = $("#RegisterModal #Address").val();
+            var zipcode = $("#RegisterModal #Zipcode").val();
+            var city = $("#RegisterModal #City").val();
+
+            var inputErrors = email === "" || password === "" || repeatPassword === "" || firstname === "" || lastname === "" || address === "" || zipcode === "" || city === "";
+
+            $("#RegisterModal .table-modal input").each(function () {
+                var val = $(this).val();
+                if (val === "") {
+                    $(this).addClass("input-error");
+                    var valErrMsg = $(this).attr("data-val-required");
+                    $(this).closest("tr").find(".val-error").text(valErrMsg);
+
+                } else {
+                    $(this).removeClass("input-error");
+                }
+
+            })
+
+            if (inputErrors) {
+                $("#messageRegister").text("Vennligst kontroller feltene");
+            }
+
+            if (password !== repeatPassword) {
+                $("#messageRegister").text("Vennligst sørg for at passordene er like");
+                $("#RegisterModal #Password, #RegisterModal #RepeatPassword").addClass("input-error");
+                return;
+            }
+            if (inputErrors) return;
+
+            $("#messageRegister").text("");
+
+
+            var customer = {
+                email: email,
+                password: password,
+                repeatPassword: repeatPassword,
+                firstname: firstname,
+                lastname: lastname,
+                address: address,
+                zipcode: zipcode,
+                city: city
+            }
+
+
+            $.ajax
+            ({
+                url: '@Url.Action("Register", "Account")',
+                data: customer,
+                method: "post",
+                success: function (result) {
+                    if (result == "False") {
+                        $("#messageRegister").html("Feil med registrering");
+                    }
+                    else if (result == "True") {
+                        window.location.reload();
+                    }
+
+
+                }, error: function () {
+                    alert("error: " + result);
+                }
+            })
+
+
+        })
+
+        $("button[data-dismiss='modal']").click(function () {
+            $("#RegisterModal .emailValidityIcon").removeClass("glyphicon-ok-circle glyphicon-ban-circle ")
+            $("#messageLoginToCheckout").html("");
+            $("#messageRegister").html("");
+            $(".table-modal input").each(function () {
+                $(this).val("");
+                $(this).closest("tr").find(".val-error").text("");
+                $(this).removeClass("input-error");
+            })
+
+        })
+    })
+</script>

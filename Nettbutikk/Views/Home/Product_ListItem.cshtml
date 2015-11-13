@@ -1,0 +1,44 @@
+﻿@model Nettbutikk.Viewmodels.ProductView
+
+<div class="product_listitem">
+    <div class="row">
+        <div class="col-md-5" style="padding-right:0;">
+            <div class="listitem_image">
+                @{
+                    string imageUrl = Model.Images.Count == 0 ? "" : Model.Images.FirstOrDefault().ImageUrl;
+                    if (imageUrl == "")
+                    {
+                        int catId = Convert.ToInt32(Model.CategoryId);
+                        switch (catId)
+                        {
+                            // Develop
+                            //case 1: imageUrl = "/Nettbutikk/Images/logo-category-tank.png"; break;
+                            //case 2: imageUrl = "/Nettbutikk/Images/logo-category-engine.png"; break;
+                            //case 3: imageUrl = "/Nettbutikk/Images/logo-tank.png"; break;
+
+                            // Published
+                            case 1: imageUrl = "/Tankshop/Images/logo-category-tank.png"; break;
+                            case 2: imageUrl = "/Tankshop/Images/logo-category-engine.png"; break;
+                            case 3: imageUrl = "/Tankshop/Images/logo-category-guns.png"; break;
+                        }
+                    }
+                }
+                <img id="imgProductID_@Model.ProductId" src="@imageUrl" alt="Bilde av @Model.ProductName" />
+            </div>
+
+        </div>
+        <div class="col-md-7">
+            <h5 style="font-weight:bold">@Html.ActionLink(@Model.ProductName + "", "Product", "Product", new { ProductId = Model.ProductId, ReturnUrl = Request.RawUrl }, null)</h5>
+        </div>
+    </div>
+    <div class="listitem_description_outer">
+        <div class="listitem_description">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+    <p>Antall på lager: @Model.Stock</p>
+    @{
+
+    }
+    <a href="#" id="@Model.ProductId" data-productName="@Model.ProductName" class="btn btn-success addItemToCart">kr <span class="formatPrice">@String.Format("{0:n}", Model.Price)</span> <span class="glyphicon glyphicon-shopping-cart"></span></a>
+</div>

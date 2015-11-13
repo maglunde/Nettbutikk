@@ -1,0 +1,27 @@
+﻿@using Nettbutikk.Viewmodels
+
+@{
+    bool LoggedIn = ViewBag.LoggedIn;
+    CustomerView customer = ViewBag.Customer;
+    List<OrderView> customerOrders = ViewBag.CustomerOrders;
+}
+
+@Html.Partial("_CustomerListOrdersPartial",customerOrders)
+<hr />
+@Html.Partial("_CustomerEditInfoPartial", customer)
+@Html.Partial("_CustomerChangePasswordPartial", new CustomerChangePassword())
+
+
+    <div>
+        @Html.ActionLink("Til butikk", "Index","Home")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+    <script>
+        $(document).ready(function () {
+
+        })
+    </script>

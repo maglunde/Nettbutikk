@@ -1,0 +1,38 @@
+@model Nettbutikk.Viewmodels.CartItem
+
+<div class="row" productid="@Model.ProductId">
+    <div class="col-sm-1">
+        @Model.ProductId
+    </div>
+    <div class="col-sm-5">
+        @Html.ActionLink(Model.Name, "Product", "Product", new { ProductId = Model.ProductId, ReturnUrl = Request.RawUrl }, null)
+    </div>
+    <div class="col-sm-1">
+        <select productid="@Model.ProductId" class="selectChangeCountItem">
+            @for (int i = 0; i < 10; i++)
+            {
+                if (i == Model.Count)
+                {
+                    <option value="@i" selected>@i</option>
+                }
+                else
+                {
+                    <option value="@i">@i</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <span class="productPrice formatPrice" productprice="@Model.Price">@String.Format("{0:n}", Model.Price)</span>
+    </div>
+    <div class="col-sm-2">
+        @{ 
+            var sumTotal = Model.Price * Model.Count;
+        }
+        <span class="totalProductPrice formatPrice">@String.Format("{0:n}", sumTotal)</span>
+    </div>
+    <div class="col-sm-1">
+        <a productid="@Model.ProductId" class="removeFromCart linkNoHref">Slett</a>
+    </div>
+</div>
+

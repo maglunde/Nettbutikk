@@ -1,0 +1,242 @@
+﻿@{
+    bool LoggedIn = (Session["LoggedIn"] == null ? false : (bool)Session["LoggedIn"]);
+    bool Admin = (Session["Admin"] == null ? false : (bool)Session["Admin"]);
+    string Message = ViewBag.Message;
+}
+
+<div class="backbar-top">
+    <div class="container">
+        <div class="adminControls">
+            @if (Admin)
+            {
+                <span>@Html.ActionLink("Kunder", "Index", "Customer")</span>
+
+                <span>@Html.ActionLink("Produkter", "Index", "Product")</span>
+
+                <span>@Html.ActionLink("Kategorier", "Index", "Category")</span>
+
+                <span>@Html.ActionLink("Bilder", "Index", "Image")</span>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="header backbar-mid">
+    <div class="container">
+        <div class="header_logo">
+            <a href="@Url.Action("Index","Home")">
+                <img src="~/Images/logo-tank.png" alt="Logo showing a tank" />
+            </a>
+        </div>
+        <div class="header_search">
+            <span class="pull-right text-danger header-message" hidden>@Message</span>
+            <div class="searchfield">
+                <input id="inputProductSearch" type="search" class="form-control" placeholder="Søk i produkter" />
+                <span class="glyphicon glyphicon-search search_icon"></span>
+                @* Temp *@
+                <span id="searchText" style="position:absolute;top:35px;left:25px;"></span>
+                <div id="searchResults">
+                    <ul id="searchResultList" hidden></ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="header_options">
+            <div class="header_login">
+                @if (!LoggedIn)
+                {
+                    <a href="#LoginModal" data-toggle="modal">Logg inn</a>
+                    <span> | </span>
+                    <a href="#RegisterModal" data-toggle="modal">Registrer bruker</a>
+                    @*<span> | </span>
+                        <span>@Html.ActionLink("Kategorier", "Index", "Category")</span>
+                        <span> | </span>
+                        <span>@Html.ActionLink("Produkter", "Index", "Product")</span>
+                        <span> | </span>
+                        <span>@Html.ActionLink("Kunder", "Index", "Customer")</span>
+                        <span> | </span>
+                        <span>@Html.ActionLink("Images", "Index", "Image")</span>*@
+
+
+
+                }
+                else
+                {
+                    //var Cookie = Request.Cookies["Userinfo"];
+                    //var Fullname = Cookie["Firstname"] + " " + Cookie["Lastname"];
+
+                    <span>@Html.ActionLink("Min side", "MyPage", "Account")</span>
+                    <span> | </span>
+                    <a href="#" id="Logout">Logg ut</a>
+                    if (Admin)
+                    {
+
+                    }
+                }
+            </div>
+            <div class="header_shop">
+                <div class="col-md-6">
+                    @*<a id="btnShoppingCart" href="#ShoppingCartModal" data-toggle="modal" class="btn btn-primary">
+                            Handlekurv <span class="glyphicon glyphicon-shopping-cart"></span>
+                        </a>*@
+                    @Html.ActionLink("Handlekurv", "Cart", "Cart", null, new { @class = "btn btn-primary" })
+
+                    <div class="cartCounter"></div>
+                </div>
+                <div class="col-md-6">
+                    @*<a href="#" class="btn btn-danger">Til kassen <span class="glyphicon glyphicon-credit-card"></span></a>*@
+                    @if (LoggedIn)
+                    {
+                        @Html.ActionLink("Til betaling", "Checkout", "Checkout", null, new { @class = "btn btn-danger" })
+
+                    }
+                    else
+                    {
+                        <a href="#LoginToCheckoutModal" data-toggle="modal" class="btn btn-danger">Til kassen</a>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@Html.Partial("_LoginModal")
+@Html.Partial("_RegisterModal")
+@Html.Partial("_LoginToCheckoutModal")
+
+<script>
+    $(document).ready(function () {
+        updateNumItemsInCart();
+
+        if ("@Message" !== "") {
+            $(".header-message").attr("hidden", false);
+        }
+
+        function updateNumItemsInCart() {
+            $.ajax({
+                url: '@Url.Action("NumItemsInCart","Cart")',
+                method: "GET",
+                success: function (result) {
+                    count = parseInt(result);
+                    $(".cartCounter").text(count);
+
+                }, error: function (result) {
+                    //window.location.href = result;
+                    alert(result);
+                }
+            })
+        }
+
+
+        $("#inputProductSearch").on("keyup", function (e) {
+
+            if ($(this).val().length > 0) {
+                $("#searchResultList").attr("hidden", false);
+                $.ajax({
+                    url: '@Url.Action("Products","Product")',
+                    data: { searchstr: $("#inputProductSearch").val() },
+                    method: "POST",
+                    success: function (result) {
+                        var obj = JSON.parse(result);
+
+                        var html = "";
+                        for (var i = 0; i < obj.length; i++) {
+                            var product = obj[i].ProductName;
+                            //var formattedHit = fattenHit(product, $("#inputProductSearch").val());
+
+                            var hit = $("#inputProductSearch").val();
+                            var re = new RegExp(hit, "gi");
+                           
+                            
+                            var formattedHit = product.replace(re, '<strong>'+hit+'</strong>')
+                            html += "<li id='" + obj[i].ProductId + "'>" +
+                                "<a href='@Url.Action("Product","Product")?ProductId=" + obj[i].ProductId + "&ReturnUrl= " + "@Request.RawUrl" + "'>" + formattedHit + "</a>" +
+                                "</li>";
+                        }
+                        console.log("@Request.RawUrl");
+
+
+                        //&ReturnUrl=%2FNettbutikk%2F
+                        if (html === "") {
+                            html = "<li style='color:#999'> Ingen resultater </li>";
+                        }
+                        $("#searchResultList").html(html);
+                    }
+                })
+            } else {
+                // empty searchfield
+                $("#searchResultList").attr("hidden", true);
+            }
+        })
+
+        $("body").click(function () {
+            $("#searchResultList").attr("hidden", true);
+        })
+
+        $("#Logout").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("Logout","Account")',
+                method: "post",
+                success: function () {
+
+                    window.location.reload();
+                }, error: function (result) {
+                    alert("error: " + JSON.stringify(result));
+                }
+            })
+        })
+
+        $("#btnShoppingCart").on("click", function () {
+            $.ajax({
+                url: '@Url.Action("GetCart","Cookie")',
+
+                success: function (result) {
+                    var cart = JSON.parse(result);
+                    populateCartTable(list);
+                }, error: function (result) {
+                    alert("error: " + JSON.stringify(result))
+                }
+
+            })
+        })
+    })
+
+    // Function count the occurrences of substring in a string;
+    function occurrences(string, subString, allowOverlapping) {
+
+        string += "";
+        subString += "";
+        if (subString.length <= 0) return (string.length + 1);
+
+        var n = 0,
+            pos = 0,
+            step = allowOverlapping ? 1 : subString.length;
+
+        while (true) {
+            pos = string.indexOf(subString, pos);
+            if (pos >= 0) {
+                ++n;
+                pos += step;
+            } else break;
+        }
+        return n;
+    }
+
+    function fattenHit(str, hit)
+    {
+        var result = "";
+        var part1 = str.substring(0, str.indexOf(hit));
+        var bold = "<b>" + str.substring(str.indexOf(hit), (str.indexOf(hit) + hit.length))+ "</b>";
+        var part2 = str.substring((str.indexOf(hit) + hit.length), str.length)
+
+        //result = part1 + "<b>" + hit + "</b>" + part2;
+        result = part1 + bold + part2;
+        return result;
+    }
+
+    
+
+
+</script>

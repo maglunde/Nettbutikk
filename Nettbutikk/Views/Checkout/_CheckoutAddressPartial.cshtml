@@ -1,0 +1,14 @@
+﻿@model Nettbutikk.Viewmodels.CustomerView
+
+<h4>Leveringsadresse</h4>
+<ul>
+    <li>
+        @Model.Firstname @Model.Lastname
+    </li>
+    <li>
+        @Model.Address 
+    </li>
+    <li>
+        @Model.Zipcode<span>, </span>@Model.City
+    </li>
+</ul>

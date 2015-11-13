@@ -1,0 +1,34 @@
+﻿
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Image</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Product ID
+        </dt>
+
+        <dd>
+            @ViewBag.Image.ProductId
+        </dd>
+
+        <dt>
+            Image URL
+        </dt>
+
+        <dd>
+            @ViewBag.Image.ImageUrl
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm("Delete","Image")) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            @Html.Hidden("ImageId")
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,118 @@
+@model List<Nettbutikk.Viewmodels.OrderView>
+<h1>Ordrehistorikk</h1>
+<ul>
+    @{
+        if (Model.Count == 0)
+        {
+            <li>
+                <span style="color:deeppink">Ingen ordre foretatt</span>
+            </li>
+
+        }
+    }
+    @foreach (var order in Model)
+    {
+        <li class="liOrderItem">
+            <a class="liTableToggle"><time raw="@order.Date"></time></a> 
+            <div class="liOrderDetails">
+                @{ 
+                    var hour = order.Date.Hour.ToString();
+                    if (hour.Length == 1)
+                    {
+                        hour = "0" + hour;
+                    }
+                    var min = order.Date.Minute.ToString();
+                    if(min.Length == 1)
+                    {
+                        min = "0" + min;
+                    }
+                }
+                <span class="date">OrdreId: @order.OrderId </span>
+                <span class="date">Dato: <span>@order.Date.Day</span>/<span>@order.Date.Month</span>-<span>@order.Date.Year</span></span>
+                <span class="date"> kl. <span>@hour</span>:<span>@min</span></span>
+                <table>
+                    <thead>
+                        <tr><th>Produkt</th><th>Antall</th><th>Enhetspris</th><th>Totalpris</th></tr>
+                    </thead>
+                    @{
+                        var orderSumTotal = 0.0;
+                    }
+                    @foreach (var item in order.Orderlines)
+                {
+                    var productTotal = item.Product.Price * item.Count;
+                    orderSumTotal += productTotal;
+                        <tr>
+                            <td>@Html.ActionLink(@item.Product.ProductName, "Product", "Product", new { ProductId = item.Product.ProductId, ReturnUrl = Request.RawUrl }, null)</td>
+                            <td>@item.Count</td>
+                            <td>@String.Format("{0:n}", item.Product.Price) kr</td>
+                            <td>@String.Format("{0:n}", productTotal) kr</td>
+                        </tr>
+                    }
+
+                    <tr style="font-weight:bold;color:forestgreen;border-top:thin solid #333;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>@String.Format("{0:n}", orderSumTotal) kr</td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+                    }
+</ul>
+<script>
+    $(document).ready(function () {
+        $(".liTableToggle").each(function () {
+            var raw = $(this).find("time").attr("raw");
+            $(this).find("time").text(timeConverter(raw));
+        })
+
+        $(".liOrderItem .liOrderDetails").each(function () {
+            $(this).hide();
+        })
+        $(".liTableToggle").unbind("click");
+        $(".liTableToggle").click(function () {
+            var listElem = $(this).closest("li").find(".liOrderDetails");
+            if (listElem.is(":visible")) {
+                listElem.hide();
+                return;
+            }
+            else {
+                listElem.show();
+                return;
+            }
+
+
+        })
+    })
+
+    function timeConverter(str) {
+        // 26.10.2015 01:18:32
+        var arr = str.split(" ");
+        var date = arr[0], time = arr[1];
+        var date = date.split(".");
+        var time = time.split(":");
+
+        var D = date[0], M = date[1] - 1, Y = date[2];
+        var h = time[0], m = time[1], s = time[2];
+
+        var d = new Date(Y, M, D, h, m, s, 0);
+        var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+        console.log("diff: " + diff);
+        var ret = "";
+        if (diff < 60)
+            return diff + " sekund" + (diff == 1 ? "" : "er") + " siden";
+        diff = Math.floor(diff / 60);
+        if (diff < 60)
+            return diff + " minutt" + (diff == 1 ? "" : "er") + " siden";
+        diff = Math.floor(diff / 60);
+        if (diff < 24)
+            return diff + " time" + (diff == 1 ? "" : "r") + " siden";
+        diff = Math.floor(diff / 24);
+        if (diff < 30)
+            return diff + " dag" + (diff == 1 ? "" : "er") + " siden";
+        diff = Math.floor(diff / 7);
+        return diff + " uke" + (diff == 1 ? "" : "r") + " siden";
+    }
+
+</script>

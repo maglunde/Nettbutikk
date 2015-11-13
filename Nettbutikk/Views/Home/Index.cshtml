@@ -1,0 +1,72 @@
+﻿@using Nettbutikk.Viewmodels;
+
+@{
+    List<CategoryView> categories = ViewBag.Categories;
+    List<ProductView> products = ViewBag.Products;
+    int counter = 0;
+}
+<div class="categories">
+    <ul class="category-list">
+        @foreach (var category in categories)
+            {
+            <li class="category-listitem">
+                @Html.ActionLink(category.CategoryName, "Category", "Home", new { @CategoryId = category.CategoryId }, null)
+            </li>
+
+        }
+    </ul>
+</div>
+<div class="content">
+
+    <h1>@ViewBag.CategoryName</h1>
+
+    @foreach (var product in products)
+    {
+        bool startRow = counter++ % 3 == 0;
+        bool endRow = counter % 3 == 0;
+
+        if (startRow)
+        {
+            @Html.Raw("<div class='row'>")
+        }
+
+
+        <div class="col-md-4">
+            @Html.Partial("Product_ListItem", product)
+        </div>
+
+        if (endRow || products.Count == counter)
+        {
+            @Html.Raw("</div>")
+        }
+    }
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("img").on("error", function () {
+             // $(this).hide();
+        })
+
+        $(".product_listitem a").unbind("click");
+        $(".product_listitem a.addItemToCart").click(function () {
+            //alert("TODO: legg " + $(this).attr("data-productName") + " i shoppingcart (Product_ListItem.cshtml)")
+            $.ajax({
+                url: '@Url.Action("AddToCart","Cart")',
+                data: {
+                    ProductId: $(this).attr("id")
+                },
+                method: "POST",
+                success: function (result) {
+                    count = parseInt(result);
+                    $(".cartCounter").text(count);
+                }, error: function (result) {
+                    //window.location.href = result;
+                    alert(JSON.stringify(result));
+                }
+
+            })
+        })
+    })
+</script>

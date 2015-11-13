@@ -1,0 +1,97 @@
+﻿@model Nettbutikk.Viewmodels.CustomerLoginPartial
+
+<div id="LoginModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Logg inn</h2></div>
+            <div class="modal-body container">
+                <span id="messageLogin" style="color:red"></span>
+                <table class="table-modal">
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Email, new { @id = "editEmail" })
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.Password)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Password)
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Lukk</button>
+                        </td>
+                        <td>
+                            <button id="btnLogin" class="btn btn-success">Logg inn</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Ny her?
+                            <a href="#RegisterModal" data-dismiss="modal" data-toggle="modal"> Registrer</a> deg her.
+                        </td>
+                    </tr>
+                </table>
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+    $(document).ready(function () {
+        $("button[data-dismiss='modal']").click(function () {
+            $("#messageLogin").html("");
+        })
+
+        $("#btnLogin").click(function () {
+            
+            var email = $("#Email").val();
+            var password = $("#Password").val();
+
+            $.ajax
+            ({
+                url: '@Url.Action("Login", "Account")',
+                data: {
+                    email: email,
+                    password: password
+                },
+                method: "post",
+                success: function (result) {
+                    if (result == "False") {
+                        $("#messageLogin").html("Feil i brukernavn og/eller passord");
+                    }
+                    else if (result == "True") {
+                        $("#messageLogin").html("Success");
+                        window.location.reload();
+                    }
+
+
+                }
+
+            })
+        })
+    })
+</script>

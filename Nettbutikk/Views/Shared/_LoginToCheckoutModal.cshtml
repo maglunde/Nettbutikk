@@ -1,0 +1,96 @@
+﻿@model Nettbutikk.Viewmodels.CustomerLoginPartial
+
+<div id="LoginToCheckoutModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Logg inn for gå til kassen</h2></div>
+            <div class="modal-body container">
+                <span id="messageLoginToCheckout" style="color:red"></span>
+                <table class="table-modal">
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Email, new { @id = "editEmail" })
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.Password)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Password)
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Lukk</button>
+                        </td>
+                        <td>
+                            <button id="btnLoginToCheckout" class="btn btn-success">Logg inn</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Ny her?
+                            <a href="#RegisterModal" data-dismiss="modal" data-toggle="modal"> Registrer</a> deg her.
+                        </td>
+                    </tr>
+                </table>
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+    $(document).ready(function () {
+
+        $("#LoginToCheckoutModal #btnLoginToCheckout").click(function () {
+
+            var email = $("#LoginToCheckoutModal #Email").val();
+            var password = $("#LoginToCheckoutModal #Password").val();
+
+            //console.log(email+" "+password);return;
+            //console.log('@Url.Content("~/Checkout/Checkout")'); return;
+            $.ajax
+            ({
+                url: '@Url.Action("Login", "Account")',
+                data: {
+                    email: email,
+                    password: password
+                },
+                method: "post",
+                success: function (result) {
+                    if (result == "False") {
+                        $("#messageLoginToCheckout").html("Feil i brukernavn og/eller passord");
+                    }
+                    else if (result == "True") {
+                        $("messageLoginToCheckout").html("Success");
+                        window.location.href = '@Url.Content("~/Checkout/Checkout")';
+                    }
+
+
+                }
+
+            })
+        })
+    })
+</script>

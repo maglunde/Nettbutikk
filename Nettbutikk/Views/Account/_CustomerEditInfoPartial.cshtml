@@ -1,0 +1,124 @@
+﻿@model Nettbutikk.Viewmodels.CustomerView
+<div class="divUpdateCustomer">
+    @using (Html.BeginForm())
+    {
+        <div class="form-horizontal">
+            <h4>Endre personalia</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Firstname, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input id="inFirstname" , class="form-control" value="@Model.Firstname" />
+                    @Html.ValidationMessageFor(model => model.Firstname, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Lastname, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input id="inLastname" , class="form-control" value="@Model.Lastname" />
+                    @Html.ValidationMessageFor(model => model.Lastname, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input id="inAddress" , class="form-control" value="@Model.Address" />
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Zipcode, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input id="inZipcode" , class="form-control" value="@Model.Zipcode" />
+                    @Html.ValidationMessageFor(model => model.Zipcode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input id="inCity" , class="form-control" value="@Model.City" />
+                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input id="btnUpdateCustomerInfo" type="button" value="Lagre" class="btn btn-default" />
+                    <span id="updateCustomerMessage"></span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $(".divUpdateCustomer #btnUpdateCustomerInfo").unbind("click");
+        $(".divUpdateCustomer #btnUpdateCustomerInfo").on("click", function () {
+
+            var Firstname = $("#inFirstname").val();
+            var Lastname = $("#inLastname").val();
+            var Address = $("#inAddress").val();
+            var Zipcode = $("#inZipcode").val();
+            var City = $("#inCity").val();
+
+            var inputerr = Firstname == "" || Lastname == "" || Address == "" || Zipcode == "" || City == "";
+            if (Firstname == "") {
+                $(".divUpdateCustomer #inFirstname").addClass("input-error");
+            }
+            if (Lastname === "") {
+                $(".divUpdateCustomer #inLastname").addClass("input-error");
+            }
+            if (Address === "") {
+                $(".divUpdateCustomer #inAddress").addClass("input-error");
+            }
+            if (Zipcode === "") {
+                $(".divUpdateCustomer #inZipcode").addClass("input-error");
+            }
+            if (City === "") {
+                $(".divUpdateCustomer #inCity").addClass("input-error");
+            }
+
+            if (inputerr) {
+                $(".divUpdateCustomer #updateCustomerMessage").text("Fyll inn alle feltene").css("color", "red");
+                return;
+            }
+
+            // No errors, remove class input-error
+            $(".divUpdateCustomer input").each(function () {
+                $(this).removeClass("input-error");
+                $(".divAdminUpdateCustomer #updateCustomerMessage").text("");
+            })
+
+            $(".divUpdateCustomer #updateCustomerMessage").text("");
+
+            //console.log(Firstname + " " + Lastname + " " + Address + " " + Zipcode + " " + City); return;
+
+            $.ajax({
+                url: '@Url.Action("UpdateCustomerInfo","Account")',
+                data: {
+                    Firstname: Firstname,
+                    Lastname: Lastname,
+                    Address: Address,
+                    Zipcode: Zipcode,
+                    City: City
+                },
+                method: "POST",
+                success: function (result) {
+                    if (result === "True") {
+                        $("#updateCustomerMessage").text("Lagret").css("color", "green");
+                    }
+                    else if (result === "False") {
+                        //window.location.reload();
+                        $("#updateCustomerMessage").text("Feil ved lagring").css("color", "red");
+                    } else {
+                        alert(result);
+                    }
+                }, error: function (result) {
+                    window.location.reload();
+                    $("#updateCustomerMessage").text("Feil ved tilkobling til server, prøv igjen senere").css("color", "red");
+                }
+            })
+
+        })
+    })
+</script>

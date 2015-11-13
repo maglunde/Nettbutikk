@@ -1,0 +1,152 @@
+﻿@using Nettbutikk.Viewmodels;
+@{
+    List<CartItem> ShoppingCart = ViewBag.ShoppingCart;
+}
+
+<div class="shoppingcart">
+    <h1>Handlekurv</h1>
+    <section>
+
+        <div class="rowlist">
+            <div class="row">
+                <div class="col-sm-1">
+                    ID
+                </div>
+                <div class="col-sm-5">
+                    Produkt
+                </div>
+                <div class="col-sm-1">
+                    Antall
+                </div>
+                <div class="col-sm-2">
+                    Enhetspris
+                </div>
+                <div class="col-sm-2">
+                    Totalpris
+                </div>
+                <div class="col-sm-1">
+                    Valg
+                </div>
+            </div>
+            @foreach (var item in ShoppingCart)
+            {
+                @Html.Partial("_CartItem", item);
+            }
+        </div>
+    </section>
+    <hr />
+    <section>
+        <div class="summary_wrapper">
+            <div class="shoppingcart_summary">
+                <span class="lblPrice">Totalsum: </span>
+                <span id="sumTotal" class="formatPrice">@Html.Action("GetSumTotalCart", "Cart")</span>
+                @Html.ActionLink("Til betaling","Checkout","Checkout",null, new { @class = "btn btn-danger " })
+                @Html.ActionLink("Tøm handlekurven", "EmptyCart", "Cart", new { returnUrl = Request.RawUrl }, new { @class = "emptyCartLink" })
+            </div>
+        </div>
+    </section>
+    @Html.ActionLink("Tilbake til butikk", "Index", "Home")
+</div>
+
+<script>
+    $(document).ready(function () {
+        
+        $("#sumTotal").text(formatPrice($("#sumTotal").text()))
+    
+        $(".selectChangeCountItem").change(function () {
+            var pId = $(this).attr("productid");
+            var count = parseInt($(this).val());
+            if (count == 0) {
+                var row = $(this).closest(".row");
+                removeFromCart(pId, row);
+                return;
+            }
+
+            var productPrice = parseFloat($(this).closest(".row").find(".productPrice").attr("productprice"));
+            var totalPrice = productPrice * count;
+            var totalPriceElem = $(this).closest(".row").find(".totalProductPrice");
+                       
+            $.ajax({
+                url: '@Url.Action("UpdateCartProductCount","Cart")',
+                data: {
+                    ProductId:pId,
+                    Count: count
+                },
+                method: "POST",
+                success: function (result) {
+                    count = parseInt(result);
+                    $(".cartCounter").text(count);
+
+                    totalPriceElem.text(formatPrice(totalPrice));
+                    updateSumTotal();
+                }, error: function (result) {
+                    alert("update: error");
+                }
+            })
+
+            updateSumTotal();
+        })
+
+        $(".removeFromCart").unbind("click");
+        $(".removeFromCart").on("click", function () {
+
+            var pId = $(this).attr("productid");
+            var row = $(this).closest(".row");
+
+            removeFromCart(pId, row);
+
+        })
+    })
+
+    // functions
+    function removeFromCart(pId, row) {
+        $.ajax({
+            url: '@Url.Action("RemoveFromCart","Cart")',
+            data: {
+                ProductId: pId
+            },
+            method: "POST",
+            success: function (result) {
+                if (result == -1) {
+                    alert("feil ved sletting av vare: " + result);
+                }
+                else {
+                    row.remove();
+                    $(".cartCounter").text(JSON.parse(result));
+                    updateSumTotal();
+
+                }
+            }, error: function (result) {
+                alert("remove: error: " + JSON.stringify(result));
+            }
+        })
+    }
+
+    function updateSumTotal() {
+        $.ajax({
+            url: '@Url.Action("GetSumTotalCart","Cart")',
+            success: function (result) {
+                $(".shoppingcart_summary #sumTotal").text(formatPrice(result));
+
+            }, error: function (result) {
+                alert("error in " +@Request.RawUrl +" : " + result);
+            }
+        })
+    }
+
+    function formatPrice(price) {
+        price = price + "";
+        var formatted = "";
+        var counter = 0;
+        for (var i = (price.length - 1) ; i >= 0; i--) {
+            if (counter % 3 == 0 && counter > 0)
+                formatted = " " + formatted;
+            formatted = price.charAt(i) + formatted;
+            counter++;
+        }
+        formatted = formatted + ",00";
+
+        return formatted;
+    }
+
+</script>

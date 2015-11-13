@@ -1,0 +1,142 @@
+﻿@model Nettbutikk.Viewmodels.ProductView
+@{ 
+    var Images = Model.Images;
+}
+
+<div class="product_details">
+    <div class="row"><h1>@Model.ProductName</h1></div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="details_image">
+                @*<span class="glyphicon glyphicon-chevron-left " ></span>*@
+                <div>
+                    @{
+                        string imageUrl = Model.Images.Count == 0 ? "" : Model.Images.FirstOrDefault().ImageUrl;
+                        if (imageUrl == "")
+                        {
+                            int catId = Convert.ToInt32(Model.CategoryId);
+                            switch (catId)
+                            {
+                                // Develop
+                                //case 1: imageUrl = "/Nettbutikk/Images/logo-category-tank.png"; break;
+                                //case 2: imageUrl = "/Nettbutikk/Images/logo-category-engine.png"; break;
+                                //case 3: imageUrl = "/Nettbutikk/Images/logo-tank.png"; break;
+
+                                // Published
+                                case 1: imageUrl = "/Tankshop/Images/logo-category-tank.png"; break;
+                                case 2: imageUrl = "/Tankshop/Images/logo-category-engine.png"; break;
+                                case 3: imageUrl = "/Tankshop/Images/logo-category-guns.png"; break;
+                            }
+                        }
+                    }
+                    <img src="@imageUrl" />
+
+                </div>
+                @*<span class="glyphicon glyphicon-chevron-right"></span>*@
+            </div>
+            <div class="image-thumbnails">
+                <div>
+
+                @for(int i=0; i< Images.Count;i++)
+                {
+                    if (i == 0)
+                    {
+                        <img src="@Images[i].ImageUrl" class="image-thumbnail thumbnail-selected" hidden />
+                    }
+                    else
+                    {
+                        <img src="@Images[i].ImageUrl" class="image-thumbnail" hidden/>
+
+                    }
+                }
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <section>
+                <div class="details_price">
+                    <div class="row">
+
+                        <span class="price formatPrice">@String.Format("{0:n}", Model.Price)</span><span> NOK</span>
+                    </div>
+                    <div class="row">
+                        
+                            <a class="btn btn-success addToCart" id="@Model.ProductId">Legg i handlekurv</a>
+                        
+                    </div>
+
+                </div>
+            </section>
+            <section>
+                <div class="details_var_info">
+                    <div class="row">
+                        <div class="col-md-6">Antall på lager</div>
+                        <div class="col-md-6">@Model.Stock</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">Produktnummer</div>
+                        <div class="col-md-6">@Model.ProductId</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">Kategori</div>
+                        <div class="col-md-6">@Model.CategoryName</div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="details_description">
+
+                    <div class="row">
+                        <span>
+                            @Model.Description
+                        </span>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("img").each(function () {
+            $(this).fadeIn(200);
+        })
+
+        $(".product_details .image-thumbnail").click(function () {
+            $(this).siblings().removeClass("thumbnail-selected");
+            $(this).addClass("thumbnail-selected");
+
+            var src = $(this).attr("src");
+            var img = $(this).closest(".product_details").find(".details_image").find("img");
+            img.attr("src", src);
+        })
+
+        $("img").on("error", function () {
+            $(this).hide();
+        })
+
+        $(".product_details a").unbind("click");
+        $(".product_details a.addToCart").click(function () {
+            
+            $.ajax({
+                url: '@Url.Action("AddToCart","Cart")',
+                data: {
+                    ProductId:$(this).attr("id")
+                },
+                method: "POST",
+                success: function (result) {
+                    count = parseInt(result);
+                    $(".cartCounter").text(count);
+                }, error: function (result) {
+                    alert(JSON.stringify(result));
+                }
+
+            })
+        })
+    })
+ 
+</script>

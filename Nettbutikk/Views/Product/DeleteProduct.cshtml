@@ -1,0 +1,66 @@
+﻿@model Nettbutikk.Model.Product
+@using Nettbutikk.Viewmodels
+@{
+    ProductView Product = ViewBag.Product;
+}
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Name
+        </dt>
+        <dd>
+            Product.ProductName
+        </dd>
+        <dt>
+            Price
+        </dt>
+        <dd>
+            @string.Format("{0:n}", Product.Price) kr
+        </dd>
+        <dt>
+            Stock
+        </dt>
+        <dd>
+            Product.Stock
+        </dd>
+        <dt>
+            Description
+        </dt>
+        <dd>
+            @{
+                string description = Product.Description.Length >= 20 ? Product.Description.Substring(0, 20) + "..." : Product.Description;
+            }
+            @description
+        </dd>
+        <dt>
+            Image url
+        </dt>
+        <dd>
+            @{
+                string imageUrl = Product.Images.Count == 0 ? "Ingen bilder" : Product.Images.FirstOrDefault().ImageUrl;
+                string url = imageUrl.Length >= 20 ? imageUrl.Substring(0, 20) + "..." : imageUrl;
+            }
+            @url
+        </dd>
+        <dt>
+            Category
+        </dt>
+        <dd>
+            Product.CategoryName
+        </dd>
+    </dl>
+    @using (Html.BeginForm("Delete", "Product"))
+    {
+
+        @Html.AntiForgeryToken()
+        @Html.Hidden("ProductId")
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,243 @@
+﻿@using Nettbutikk.Viewmodels
+@{
+    ViewBag.Title = "Administration_Customer";
+
+    CustomerView Customer = ViewBag.Customer;
+    string ReturnUrl = ViewBag.ReturnUrl;
+}
+
+<a href="@ReturnUrl">Tilbake</a>
+<h2>KundeId: @Customer.CustomerId (@Customer.Email)</h2>
+
+<div class="divAdminUpdateCustomer">
+    <h4>Endre Personalia</h4>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(c => Customer.Firstname, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="inFirstname" , class="editable form-control" value="@Customer.Firstname" last-save="@Customer.Firstname" />
+                <span class="val-error text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => Customer.Lastname, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="inLastname" , class="editable form-control" value="@Customer.Lastname" last-save="@Customer.Lastname" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => Customer.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="inAddress" , class="editable editable form-control" value="@Customer.Address" last-save="@Customer.Address" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => Customer.Zipcode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="inZipcode" , class="editable form-control" value="@Customer.Zipcode" last-save="@Customer.Zipcode" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => Customer.City, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="inCity" , class="editable form-control" value="@Customer.City" last-save="@Customer.City" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="btnUpdateCustomerInfo" type="button" value="Lagre" class="btn btn-success" />
+                <input id="btnResetCustomerInfo" type="button" value="Tilbakestill" class="btn btn-default" />
+                <span id="updateCustomerMessage"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="divAdminChangePassword">
+    @model Nettbutikk.Viewmodels.CustomerChangePassword
+
+    <div class="form-horizontal">
+        <h4>Endre Passord</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CurrentPassword, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.CurrentPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CurrentPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewPassword, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.NewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NewPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.RepeatNewPassword, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.EditorFor(model => model.RepeatNewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RepeatNewPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+                <input id="btnChangePassword" type="button" value="Lagre" class="btn btn-default" />
+                <span id="changePwMessage"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="divAdminCustomerOrders">
+<hr class="hr-dark"/>
+   @{Html.RenderAction("OrdersPartial","Order", new { CustomerId = Customer.CustomerId });}
+   
+   
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $(".divAdminUpdateCustomer #btnUpdateCustomerInfo").unbind("click");
+        $(".divAdminUpdateCustomer #btnUpdateCustomerInfo").on("click", function () {
+
+            var fn = $(".divAdminUpdateCustomer #inFirstname").val();
+            var ln = $(".divAdminUpdateCustomer #inLastname").val();
+            var adr = $(".divAdminUpdateCustomer #inAddress").val();
+            var zip = $(".divAdminUpdateCustomer #inZipcode").val();
+            var city = $(".divAdminUpdateCustomer #inCity").val();
+
+
+            var inputErr = fn === "" || ln === "" || adr === "" || zip === "" || city === "";
+            if (fn === "") {
+                $(".divAdminUpdateCustomer #inFirstname").addClass("input-error");
+            }
+            if (ln === "") {
+                $(".divAdminUpdateCustomer #inLastname").addClass("input-error");
+            }
+            if (adr === "") {
+                $(".divAdminUpdateCustomer #inAddress").addClass("input-error");
+            }
+            if (zip === "") {
+                $(".divAdminUpdateCustomer #inZipcode").addClass("input-error");
+            }
+            if (city === "") {
+                $(".divAdminUpdateCustomer #inCity").addClass("input-error");
+            }
+
+            if (inputErr) {
+                console.log("inputerr");
+                $(".divAdminUpdateCustomer #updateCustomerMessage").text("Fyll inn alle feltene").css("color", "red");
+                return;
+            }
+
+            // No errors, remove class input-error
+            $(".divAdminUpdateCustomer input").each(function () {
+                $(this).removeClass("input-error");
+                $(".divAdminUpdateCustomer #updateCustomerMessage").text("");
+            })
+
+
+            var customer = {
+                Email: "@Customer.Email",
+                Firstname: fn,
+                Lastname: ln,
+                Address: adr,
+                Zipcode: zip,
+                City: city
+            };
+
+            // console.log(customer.Email + " " + fn + " " + ln + " " + adr + " " + zip + " " + city); return;
+
+            $.ajax({
+                url: '@Url.Action("UpdateCustomerInfo", "Customer")',
+                data: customer,
+                type: "POST",
+                success: function (result) {
+                    if (result === "True") {
+                        // updating last-save
+                        $(".divAdminUpdateCustomer .editable").each(function () {
+                            $(this).attr("last-save", $(this).val());
+                        })
+
+                        $(".divAdminUpdateCustomer #updateCustomerMessage").text("Lagret").css("color", "green");
+                    }
+                    else if (result === "False") {
+                        $(".divAdminUpdateCustomer #updateCustomerMessage").text("Feil ved lagring").css("color", "red");
+                    } else {
+                        alert(result);
+                    }
+                }
+            })
+
+        })
+
+        // Resetting inputfields to last saved values
+        $(".divAdminUpdateCustomer #btnResetCustomerInfo").click(function () {
+            $(".divAdminUpdateCustomer #inFirstname").val("@Customer.Firstname");
+            $(".divAdminUpdateCustomer #inLastname").val("@Customer.Lastname");
+            $(".divAdminUpdateCustomer #inAddress").val("@Customer.Address");
+            $(".divAdminUpdateCustomer #inZipcode").val("@Customer.Zipcode");
+            $(".divAdminUpdateCustomer #inCity").val("@Customer.City");
+
+            $(".divAdminUpdateCustomer .editable").each(function () {
+                $(this).removeClass("input-error");
+                $(this).val($(this).attr("last-save"));
+                $(".divAdminUpdateCustomer #updateCustomerMessage").text("");
+            })
+
+        })
+
+        // Change password
+
+        $(".divAdminChangePassword #btnChangePassword").unbind("click");
+        $(".divAdminChangePassword #btnChangePassword").on("click", function () {
+            var currentPw = $(".divAdminChangePassword #CurrentPassword").val();
+            var newPw = $(".divAdminChangePassword #NewPassword").val();
+            var repNewPw = $(".divAdminChangePassword #RepeatNewPassword").val();
+
+            if (newPw !== repNewPw) {
+                $(".divAdminChangePassword #NewPassword").addClass("input-error");
+                $(".divAdminChangePassword #RepeatNewPassword").addClass("input-error");
+                $(".divAdminChangePassword #changePwMessage").text("Passordene er ikke like").css("color", "red");
+                return;
+            }
+
+            $(".divAdminChangePassword #NewPassword").removeClass("input-error")
+            $(".divAdminChangePassword #RepeatNewPassword").removeClass("input-error")
+            $("#changePwMessage").text("");
+
+            //console.log(currentPw + " " + newPw + " " + repNewPw); return;
+
+            $.ajax({
+                url: '@Url.Action("ChangePassword","Account")',
+                data: {
+                    CurrentPw: currentPw,
+                    NewPassword: newPw
+                },
+                method: "POST",
+                success: function (result) {
+                    if (result === "True") {
+                        $(".divAdminChangePassword #CurrentPassword").removeClass("input-error")
+                        $(".divAdminChangePassword #CurrentPassword").val("");
+                        $(".divAdminChangePassword #NewPassword").val("");
+                        $(".divAdminChangePassword #RepeatNewPassword").val("");
+                        $(".divAdminChangePassword #changePwMessage").text("Passordet ble endret").css("color", "green");
+                    }
+                    if (result === "False") {
+                        $(".divAdminChangePassword #CurrentPassword").addClass("input-error");
+                        $(".divAdminChangePassword #changePwMessage").text("Feil passord").css("color", "red");
+                    }
+
+                }, error: function (result) {
+                    alert("error: " + JSON.stringify(result));
+                }
+            })
+
+        });
+
+    })
+</script>

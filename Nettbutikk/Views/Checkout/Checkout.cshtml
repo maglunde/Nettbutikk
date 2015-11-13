@@ -1,0 +1,60 @@
+﻿@using Nettbutikk.Viewmodels
+@{
+    
+    List<CartItem> cart = ViewBag.Cart;
+    CustomerView customer = ViewBag.Customer;
+}
+<div class="divCheckout">
+    <h1>Din ordre</h1>
+    <hr />
+    @Html.Partial("_CheckoutItemsPartial", cart)
+    <hr />
+    @Html.Partial("_CheckoutAddressPartial", customer)
+    <hr />
+    @*<a id="btnConfirmPlaceOrder" class="btn btn-success">Bekreft kjøp</a>*@
+
+    @Html.ActionLink("Bekreft kjøp", "PlaceOrder", "Checkout", new { returnUrl = Request.RawUrl }, new { @class = "btn btn-success" })
+</div>
+<script>
+    $(document).ready(function () {
+        
+
+        $("#btnConfirmPlaceOrder").unbind("click");
+        $("#btnConfirmPlaceOrder").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("PlaceOrder","Checkout")',
+                method: "POST",
+                success: function (result) {
+                    var OrderId = parseInt(result);
+                    alert(typeof OrderId+ " : "+ OrderId);
+                    if (OrderId > 0) {
+                        $(".cartCounter").text(0);
+                        
+                        // Return reciept
+                        $.ajax({
+                            url: '@Url.Action("GetReciept", "Checkout")',
+                            data: {
+                                OrderId:OrderId
+                            }, method: "POST",
+                            success: function (result) {
+                                var reciept = JSON.parse(result);
+                                console.log("kvittor: " + reciept);
+                            },error:function(result)
+                            {
+                                alert("error reciept: "+JSON.stringify(result));
+                            }
+
+                        })
+
+                    } else
+                        alert("success : men kunne ikke sette inn ordre.. :");
+
+
+                }, error: function (result) {
+                    alert("error:" + result);
+                }
+            })
+        })
+    })
+</script>

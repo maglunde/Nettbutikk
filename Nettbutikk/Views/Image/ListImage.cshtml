@@ -1,0 +1,64 @@
+﻿<p>
+    @Html.ActionLink("Create New", "CreateImage")
+</p>
+
+<script>
+    $(document).ready(function(){
+
+        $('a[data-toggle="popover"]').popover({
+            html: true,
+            trigger: 'hover',
+            content: function () {
+                return '<img class=".img-responsive" src="' + $(this).attr('href') + '" width="400" height="300" />';
+
+            }
+        });
+
+    });
+</script>
+
+<style>
+    .popover {
+        max-width: 100%;
+    }
+</style>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Product ID
+        </th>
+        <th>
+            Image URL
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+    @foreach (var image in ViewBag.Images)
+    {
+
+        <tr>
+            <td>
+                @image.ProductId
+            </td>
+            <td>
+                @{
+                    string url = image.ImageUrl.Length >= 40 ? image.ImageUrl.Substring(0, 40) + "..." : image.ImageUrl;
+                }
+
+                <a href="@image.ImageUrl" data-toggle="popover" data-trigger="hover">@url</a>
+
+            </td>
+            <td>
+
+                @Html.ActionLink("Edit", "EditImage", new { imageId = image.ImageId }) |
+                @Html.ActionLink("Delete", "DeleteImage", new { imageId = image.ImageId })
+
+            </td>
+        </tr>
+                    }
+
+</table>
