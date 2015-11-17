@@ -1,4 +1,5 @@
 ﻿using BLL.Category;
+using BLL.FAQ;
 using Nettbutikk.Viewmodels;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,17 @@ namespace Nettbutikk.Controllers
 {
     public class FAQController : Controller
     {
-        private ICategoryLogic _categoryBLL;
+        private IFAQLogic _faqBLL;
 
         public FAQController()
         {
-            _categoryBLL = new CategoryBLL();
+            _faqBLL = new FAQBLL();
         }
 
         // GET: FAQ
         public ActionResult Index()
         {
+            ViewBag.Categories = _faqBLL.GetAllCategories();
             return View("FAQ");
         }
     }

@@ -1,6 +1,7 @@
-﻿
+﻿@using Nettbutikk.Model
 @{
     ViewBag.Title = "FAQ";
+    List<FAQCategoryModel> Categories = ViewBag.Categories;
     bool Admin = (Session["Admin"] == null ? false : (bool)Session["Admin"]);
 
 }
@@ -28,12 +29,26 @@
                 <div ng-show="showFaqs" class="panel-body">
 
                     <ul class="nav nav-tabs">
-                        <li role="presentation" ng-class="activeCategory">
+                        <li role="presentation" class="active">
                             <a href="#" ng-click="showCategoryFAQs(0)">FAQ</a>
                         </li>
-                        <li role="presentation" ng-repeat="category in categories" ng-class="activeCategory" ng-cloak>
-                            <a href="#" ng-click="showCategoryFAQs(category.Id)">{{category.Name}}</a>
+                        @foreach (var c in Categories)
+                        {
+                            <li role="presentation" >
+                                <a href="#" ng-click="showCategoryFAQs(@c.Id)" >
+                                    @c.Name
+                                </a>
+                            </li>
+                        }
+
+                        @*<li role="presentation"  >
+                            <a href="#" ng-click="showCategoryFAQs(0)">FAQ</a>
                         </li>
+                        <li role="presentation" ng-repeat="category in categories" ng-cloak>
+                            <a href="#" ng-click="showCategoryFAQs(category.Id)" ng-class="($index==selectedIndex) ? 'active' : ''">
+                                {{category.Name}}
+                            </a>
+                        </li>*@
                     </ul>
                     <ul class="list-group list-striped">
                         <li ng-repeat="faq in faqs" class="list-group-item">
@@ -54,7 +69,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-1">
-                                    
+
                                 </div>
                                 <div class="col-md-9">
                                     <div class="faqAnswer text-muted" ng-cloak>
@@ -166,3 +181,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $(".nav > li").on("click", function () {
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+        })
+    })
+</script>
