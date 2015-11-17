@@ -17,8 +17,135 @@ namespace Nettbutikk.Migrations
 
         protected override void Seed(TankshopDbContext context)
         {
-
             Random gen = new Random();
+
+            // FAQS
+
+            context.FAQCategories.AddOrUpdate(
+                new FAQCategory
+                {
+                    FAQCategoryId = 1,
+                    Name = "Levering",
+                    Questions = new List<Model.FAQ>
+                    {
+                        new Model.FAQ
+                        {
+                            Question = "Leverer dere på døren?",
+                            Answer = "Med tillatelse fra offentlige myndigheter kan vi kjøre produktet helt frem til garasjen din. Med forbehold om offentlig godkjenning.",
+                            Score = gen.Next(-3,25)
+                        },
+                        new Model.FAQ
+                        {
+                            Question="Hvor lang er leveringstiden?",
+                            Answer="Leveringstiden er vanligvis på 3-4 arbeidsdager dersom varen er på lager. Levering til utlandet tar gjerne noen dager ekstra.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                             Question="Hva er fraktkostnadene?",
+                            Answer="Alle varer under 10 kg er gratis, over dette er fraktkostnadene på 1 kr for hver ekstra kg. Eks: 15 kg  varer -> 4 kr frakt. Kjempebillig altså!",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                             Question="Hva er betingelsene for hjemlevering?",
+                            Answer="- Din ordre må være betalt før avtalt levering.\n- Avbooking må skje senest to dager innen avtalt leveringstid.\n- Om levering ikke kan gjennomføres på grunn av hinder på leveringssted eller at avbooking har skjedd senere enn to dager før leveringstid blir ikke fraktkostnadene refundert.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                             Question="Hvem har ansvaret dersom varen blir ødelagt i forsendelsen?",
+                            Answer="Det ansvaret tar dessverre ikke vi på dette tidspunktet.",
+                            Score = gen.Next(-3,25)
+                        },
+                    }
+                }, new FAQCategory
+                {
+                    FAQCategoryId = 2,
+                    Name = "Reklamasjon",
+                    Questions = new List<Model.FAQ>
+                    {
+                        new Model.FAQ
+                        {
+                            Question ="Hvor lang angrefrist har jeg?",
+                            Answer = "Det er 30 dagers åpent kjøp. Dersom våre produkter ikke står til din forventning vil vi refundere 50% av kjøpssummen.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Hvor lang er garantien deres på varene?",
+                            Answer = "Vi garanterer iallefall at vi skal gjøre vårt beste på å satse på og håpe at varen fungerer som den skal så lenge som mulig.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Reparerer dere skader?",
+                            Answer = "Ja bare send produktet i posten så ordner vi reparasjon så raskt som mulig. Med forbehold om lang venteliste og enda lengre reperasjonstid.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Får vi et låneprodukt under reperasjonstiden?",
+                            Answer = "Ja vi sender en tilsvarende vare mot et lite tillegg på 40% av totalsummen på varen.",
+                            Score = gen.Next(-3,25)
+                        }
+                    }
+                }, new FAQCategory
+                {
+                    FAQCategoryId = 3,
+                    Name = "Betaling",
+                    Questions = new List<Model.FAQ>
+                    {
+                        new Model.FAQ
+                        {
+                            Question ="Hvilke betalingstjenester godtar dere?",
+                            Answer = "Vi godtar VISA, PayPal, Kontanter, MasterCard, Bitcoins, Dogecoin og Litecoins.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Kan man betale varer med en annen tilsvarende vare, en byttehandel?",
+                            Answer = "Nei",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Hvilke garantier har vi for at dere ikke leverer varer etter betaling? ",
+                            Answer = "All handel forgår på egen risiko. Men du kan stole på oss!",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Når skal betalingen utføres?",
+                            Answer = "Betaling skjer ved bestilling, uten unntak.",
+                            Score = gen.Next(-3,25)
+                        }
+                    }
+                }, new FAQCategory
+                {
+                    FAQCategoryId = 4,
+                    Name = "Annet",
+                    Questions = new List<Model.FAQ>
+                    {
+                        new Model.FAQ
+                        {
+                            Question ="Er dere registrert i Brønnøysundsregistret?",
+                            Answer = "Nei",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Hvor får dere alle varene dere fra?",
+                            Answer = "Alle varer er samlet sammen etter forskjellige kriger og konflikter rundt omkring i verden. Stort sett fra WW2.",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Hvor er lageret deres?",
+                            Answer = "Det befinner seg på en hemmelig plass utenfor Ålesund",
+                            Score = gen.Next(-3,25)
+                        },new Model.FAQ
+                        {
+                            Question ="Har dere noen gang varer på tilbud?",
+                            Answer = "Ja, det hender vi setter ned prisene litt, men de går stort sett oppover.",
+                            Score = gen.Next(-3,25)
+                        }
+                    }
+                }
+            );
+
+
+
+
 
             // Categories
             context.Categories.AddOrUpdate(
@@ -70,7 +197,7 @@ namespace Nettbutikk.Migrations
                         ImageUrl ="http://www.modelerv.com/MidTiger/DSC_0017.jpg"
                     }
                 }
-                
+
                 //
             }
             , new Product
@@ -720,7 +847,7 @@ namespace Nettbutikk.Migrations
             }, new Credential
             {
                 Email = "stalin@gmail.ru",
-                Password = CreateHash("bart")
+                Password = CreateHash("bartemann")
             });
 
 
