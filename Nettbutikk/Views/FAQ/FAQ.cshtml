@@ -40,26 +40,17 @@
                                 </a>
                             </li>
                         }
-
-                        @*<li role="presentation"  >
-                            <a href="#" ng-click="showCategoryFAQs(0)">FAQ</a>
-                        </li>
-                        <li role="presentation" ng-repeat="category in categories" ng-cloak>
-                            <a href="#" ng-click="showCategoryFAQs(category.Id)" ng-class="($index==selectedIndex) ? 'active' : ''">
-                                {{category.Name}}
-                            </a>
-                        </li>*@
                     </ul>
                     <ul class="list-group list-striped">
-                        <li ng-repeat="faq in faqs" class="list-group-item">
+                        <li ng-repeat="faq in faqs | orderBy:'-Score'" class="list-group-item" ng-cloak>
                             <div class="row">
                                 <div class="col-md-1">
-                                    <div class="faqQuestion" ng-cloak>
+                                    <div class="faqQuestion">
                                         {{faq.Id}}
                                     </div>
                                 </div>
                                 <div class="col-md-10">
-                                    <div class="faqQuestion" ng-cloak>
+                                    <div class="faqQuestion">
                                         {{faq.Question}}
                                     </div>
                                 </div>
@@ -72,17 +63,17 @@
 
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="faqAnswer text-muted" ng-cloak>
+                                    <div class="faqAnswer text-muted" >
                                         {{faq.Answer}}
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="faqRating">
-                                        <span class="glyphicon glyphicon-thumbs-up faq-rate faq-rate-plus"></span>
-                                        <div class="faqScore" ng-cloak>
+                                        <span class="glyphicon glyphicon-thumbs-up faq-rate faq-rate-plus" ng-click="faqRateUp(faq)"></span>
+                                        <div class="faqScore" >
                                             {{faq.Score}}
                                         </div>
-                                        <span class="glyphicon glyphicon-thumbs-down faq-rate faq-rate-minus"> </span>
+                                        <span class="glyphicon glyphicon-thumbs-down faq-rate faq-rate-minus" ng-click="faqRateDown(faq)"> </span>
                                     </div>
                                 </div>
                             </div>
@@ -113,9 +104,9 @@
                     </div>
                     <div ng-show="showQuestions">
                         <ul class="list-group list-striped list-style-none">
-                            <li ng-repeat="question in questions" class="list-group-item ">
+                            <li ng-repeat="question in questions" class="list-group-item "  ng-cloak>
                                 <div class="row">
-                                    <div class="col-md-9 col-xs-9" ng-cloak>
+                                    <div class="col-md-9 col-xs-9">
                                         @if (Admin)
                                         {
                                             <span class="glyphicon glyphicon-remove text-danger" ng-click="deleteQuestion(question)"></span>
@@ -124,7 +115,7 @@
                                             {{question.Question}}
                                         </span>
                                     </div>
-                                    <div class="col-md-3 col-xs-3 text-muted" style="font-size:x-small" ng-cloak>
+                                    <div class="col-md-3 col-xs-3 text-muted" style="font-size:x-small">
                                         {{question.Date | date:"d. MMM HH:mm"}}
 
                                     </div>

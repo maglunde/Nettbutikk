@@ -161,5 +161,81 @@ namespace DAL.FAQ
         {
             throw new NotImplementedException();
         }
+
+        public bool VoteUp(int id)
+        {
+            using (var db = new TankshopDbContext())
+            {
+                try
+                {
+                    var faq = db.FAQs.Find(id);
+                    if (faq == null) return false;
+                    faq.Score++;
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool VoteDown(int id)
+        {
+            using(var db = new TankshopDbContext())
+            {
+                try
+                {
+                    var faq = db.FAQs.Find(id);
+                    if (faq == null) return false;
+                    faq.Score--;
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public FAQCategoryModel getCategoryByFAQ(int id)
+        {
+            using (var db = new TankshopDbContext())
+            {
+                var FAQCategoryId= db.FAQs.Find(id).FAQCategoryId;
+                return db.FAQCategories.Where(c => c.FAQCategoryId == FAQCategoryId).Select(c => new FAQCategoryModel
+                {
+                    Id = c.FAQCategoryId, 
+                    Name = c.Name
+                }).Single();
+
+            }
+        }
+
+        public List<FAQModel> GetFAQs(int categoryid)
+        {
+            using (var db = new TankshopDbContext())
+            {
+                var dbFaqs = db.FAQs.Where(f => f.FAQCategoryId == categoryid).ToList();
+                var faqs = new List<FAQModel>();
+
+                foreach (var dbFaq in dbFaqs)
+                {
+                    var faq = new FAQModel()
+                    {
+                        Id = dbFaq.FAQId,
+                        CategoryId = dbFaq.FAQCategory.FAQCategoryId,
+                        CategoryName = dbFaq.FAQCategory.Name,
+                        Question = dbFaq.Question,
+                        Answer = dbFaq.Answer,
+                        Score = dbFaq.Score
+                    };
+                    faqs.Add(faq);
+                }
+                return faqs;
+            }
+        }
     }
 }

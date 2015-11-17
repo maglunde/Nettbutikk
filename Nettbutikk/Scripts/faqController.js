@@ -1,7 +1,9 @@
 ﻿
-var urlFAQ = "api/FAQ/";
-var urlQuestion = "api/Question/";
-var urlCategory = "api/Category/";
+var urlFAQApi = "api/FAQ/";
+var urlQuestionApi = "api/Question/";
+var urlCategoryApi = "api/Category/";
+
+var urlFAQ = "FAQ/"
 
 var app = angular.module("App", []);
 
@@ -18,22 +20,21 @@ app.controller("faqController", function ($scope, $http) {
     $scope.showCategories = false;
 
     function showCategories() {
-        $http.get(urlCategory)
-            .success(function (data) {
-                $scope.categories = data;
+        $http.get(urlCategoryApi)
+            .then(function (response) {
+                $scope.categories = response.data;
                 $scope.loadingCategories = false;
                 $scope.showCategories = true;
-            })
-            .error(function (data) {
+            }, function (response) {
                 alert(data);
             });
     }
 
     function showAllQs() {
 
-        $http.get(urlFAQ)
-            .success(function (data) {
-                $scope.faqs = data;
+        $http.get(urlFAQApi)
+            .then(function (response) {
+                $scope.faqs = response.data;
                 $scope.loadingFAQ = false;
                 $scope.showFaqs = true;
 
@@ -41,9 +42,9 @@ app.controller("faqController", function ($scope, $http) {
         );
 
 
-        $http.get(urlQuestion)
-            .success(function (data) {
-                $scope.questions = data;
+        $http.get(urlQuestionApi)
+            .then(function (response) {
+                $scope.questions = response.data;
                 $scope.loadingQuestions = false;
                 $scope.showQuestions = true;
             }
@@ -58,17 +59,16 @@ app.controller("faqController", function ($scope, $http) {
             Email: $scope.email
         };
 
-        $http.post(urlQuestion, userQuestion)
-            .success(function (data) {
-                $scope.questions = data;
+        $http.post(urlQuestionApi, userQuestion)
+            .then(function (response) {
+                $scope.questions = response.data;
                 $scope.sendStatusMessage = "Spørsmålet ble sendt";
                 $scope.sendStatusClass = "text-success"
 
                 $scope.question = "";
                 $scope.email = "";
                 $scope.formQuestion.$setPristine();
-            })
-            .error(function (data) {
+            }, function (response) {
                 $scope.sendStatusMessage = "Feil ved innsending";
                 $scope.sendStatusClass = "text-danger"
             });
@@ -76,24 +76,44 @@ app.controller("faqController", function ($scope, $http) {
     }
 
     $scope.deleteQuestion = function (question) {
-        $http.delete(urlQuestion + question.Id)
-            .success(function (data) {
+        $http.delete(urlQuestionApi + question.Id)
+            .then(function (response) {
                 showAllQs();
-            })
-            .error(function (data) {
-                alert(data)
-            })
+            },
+             function (response) {
+                 alert(response.data)
+             })
 
     }
 
     $scope.showCategoryFAQs = function (id) {
-        $http.get(urlCategory + id).then(
-               function (data) {
-                console.log("success " + data.data.length);
-            }, function (data) {
-                console.log("err " + data);
-            }, function (data) {
-                console.log("finally " + data);
-            })
+        $http.get(urlCategoryApi + id, [cache = true])
+            .then(function (response) {
+                $scope.faqs = response.data;
+            },
+             function (response) {
+                 alert("err: " + response.data);
+             })
+    }
+
+    $scope.faqRateUp = function (faq) {
+        $http.post(urlFAQ + "VoteUp/" + faq.Id)
+        .then(function (response) {
+            var i = $scope.faqs.indexOf(faq);
+            $scope.faqs[i].Score++;
+        }, function (response) {
+            alert("err: " + response.data);
+        });
+    }
+
+    $scope.faqRateDown = function (faq) {
+        $http.post(urlFAQ + "VoteDown/" + faq.Id)
+        .then(function (response) {
+            var i = $scope.faqs.indexOf(faq);
+            $scope.faqs[i].Score--;
+
+        }, function (response) {
+            alert("err: " + response.data);
+        });
     }
 })

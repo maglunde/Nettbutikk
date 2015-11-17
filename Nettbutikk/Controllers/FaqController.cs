@@ -1,5 +1,6 @@
 ﻿using BLL.Category;
 using BLL.FAQ;
+using Nettbutikk.Model;
 using Nettbutikk.Viewmodels;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,24 @@ namespace Nettbutikk.Controllers
         {
             ViewBag.Categories = _faqBLL.GetAllCategories();
             return View("FAQ");
+        }
+
+        [HttpPost]
+        public JsonResult VoteUp(int id)
+        {
+            _faqBLL.VoteUp(id);
+            var category = _faqBLL.getCategoryByFAQ(id);
+            var json = Json(_faqBLL.GetFAQs(category.Id));
+            return json;
+        }
+
+        [HttpPost]
+        public JsonResult VoteDown(int id)
+        {
+            _faqBLL.VoteDown(id);
+            var category = _faqBLL.getCategoryByFAQ(id);
+            var json = Json(_faqBLL.GetFAQs(category.Id));
+            return json;
         }
     }
 }

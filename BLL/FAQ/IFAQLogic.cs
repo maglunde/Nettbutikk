@@ -20,5 +20,9 @@ namespace BLL.FAQ
         bool DeleteUserQuestion(int id);
         List<FAQCategoryModel> GetAllCategories();
         List<FAQModel> CategoryQuestions(int id);
+        bool VoteUp(int id);
+        bool VoteDown(int id);
+        FAQCategoryModel getCategoryByFAQ(int id);
+        List<FAQModel> GetFAQs(int categoryid);
     }
 }

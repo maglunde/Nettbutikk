@@ -67,5 +67,25 @@ namespace BLL.FAQ
         {
             return _repo.UpdateFAQ(id, faq);
         }
+
+        public bool VoteUp(int id)
+        {
+            return _repo.VoteUp(id);
+        }
+
+        public bool VoteDown(int id)
+        {
+            return _repo.VoteDown(id);
+        }
+
+        public FAQCategoryModel getCategoryByFAQ(int id)
+        {
+            return _repo.getCategoryByFAQ(id);
+        }
+
+        public List<FAQModel> GetFAQs(int categoryid)
+        {
+            return _repo.GetFAQs(categoryid);
+        }
     }
 }
