@@ -118,7 +118,7 @@
                             Send svaret til
                         </span>
                         @{
-                            var emailregex = "^[_a-z]+[a-z0-9_.]*@[a-z0-9_.]+[.]{1}[a-z]{2,5}$";
+                            var emailregex = "^[_a-z]+[a-z0-9_.]*@[a-z0-9_]+(.[-a-z0-9_]+)*[.]{1}[a-z]{2,5}$";
                         }
                         <input type="text" class="form-control" placeholder="Epost-adresse"
                                name="email" ng-model="email" ng-required="true"
