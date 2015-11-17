@@ -23,9 +23,29 @@ namespace BLL.FAQ
             return _repo.AddFAQ(faq);
         }
 
+        public bool AddUserQuestion(UserQuestionModel question)
+        {
+            return _repo.AddUserQuestion(question);
+        }
+
+        public List<UserQuestionModel> AllUserQuestions()
+        {
+            return _repo.AllUserQuestions();
+        }
+
         public List<FAQModel> DeleteFAQ(int id)
         {
             return _repo.DeleteFAQ(id);
+        }
+
+        public bool DeleteUserQuestion(int id)
+        {
+            return _repo.DeleteUserQuestion(id);
+        }
+
+        public List<FAQCategoryModel> GetAllCategories()
+        {
+            return _repo.GetAllCategories();
         }
 
         public List<FAQModel> GetAllFAQs()

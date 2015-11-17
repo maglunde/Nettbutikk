@@ -599,3 +599,42 @@ section {
 .linkNoHref {
     cursor: pointer;
 }
+
+
+.faqQuestion{
+    margin-top:10px;
+    font-size:1.2em;
+}
+
+.faqAnswer{
+    width:90%;
+    margin:10px 0 10px 5%;
+    
+
+}
+
+.divListUserQuestions{
+    overflow-y:auto;
+    height:350px;
+
+}
+
+.divAskQuestion{
+}
+.txtQuestion{
+   resize:none;
+}
+
+.btnSendQuestion{
+    min-width:100px;
+}
+
+.list-group-item{
+    border:none;
+    border-bottom:thin solid #eee;
+    margin-bottom:0;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

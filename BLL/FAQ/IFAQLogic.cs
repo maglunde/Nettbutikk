@@ -15,5 +15,9 @@ namespace BLL.FAQ
         FAQModel GetFAQ(int id);
         List<FAQModel> UpdateFAQ(int id, FAQModel faq);
         List<FAQModel> DeleteFAQ(int id);
+        bool AddUserQuestion(UserQuestionModel question);
+        List<UserQuestionModel> AllUserQuestions();
+        bool DeleteUserQuestion(int id);
+        List<FAQCategoryModel> GetAllCategories();
     }
 }

@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "FAQ";
+    bool Admin = (Session["Admin"] == null ? false : (bool)Session["Admin"]);
+
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/angular.js")"></script>
+    <script src="@Url.Content("~/Scripts/faqController.js")"></script>
+}
+<div ng-app="App" ng-controller="faqController">
+
+    <a href="~/">Til hovedsiden</a>
+    <div class="row">
+        <div class="col-md-8">
+            <div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2 style="display:inline-block">
+                            <span ng-click="showCategoryFAQ(0)">
+                                FAQ
+                            </span>
+                        </h2>
+                        <h2 ng-show="loadingFAQ" class="pull-right " style="display:inline-block">
+                            Henter data...
+                        </h2>
+                    </div>
+                    <div ng-show="showFaqs" class="panel-body">
+
+                        <ul class="nav nav-tabs">
+                            <li role="presentation" class="active" >
+                                <a href="#" ng-click="showCategoryFAQ(0)" >FAQ</a>
+                            </li>
+                            <li role="presentation"  ng-repeat="category in categories" ng-cloak>
+                                <a href="#" ng-click="showCategoryFAQ(category)">{{category.Name}}</a>
+                            </li>
+                        </ul>
+
+                        <ul class="list-inline" ng-show="showCategories" style="background:#eee;">
+                            
+                        </ul>
+                        <ul class="list-group faqList">
+                            <li ng-repeat="faq in faqs" class="list-group-item">
+                                <div class="faqQuestion" ng-cloak>
+                                    {{faq.Id}}. {{faq.Question}}
+                                </div>
+                                <div class="faqAnswer text-muted" ng-cloak>
+                                    {{faq.Answer}}
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-info divListUserQuestions">
+                <div class="panel-heading">
+                    <h4 style="display:inline-block">
+                        Venter på svar
+                    </h4>
+                    <h4 class="pull-right" ng-show="loadingQuestions" style="display:inline-block">
+                        Henter data...
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <div ng-show="questions.length == 0" ng-cloak>
+                        <span class="text-muted">
+                            Ingen ubesvarte spørsmål
+                        </span>
+                    </div>
+                    <div ng-show="showQuestions">
+                        <div class="row" ng-repeat="question in questions">
+                            <div class="col-md-9 col-xs-9" ng-cloak>
+                                @if (Admin)
+                                {
+                                    <span class="glyphicon glyphicon-remove text-danger" ng-click="deleteQuestion(question)"></span>
+                                }
+                                <span class="text-primary">
+                                    {{question.Question}}
+                                </span>
+                            </div>
+                            <div class="col-md-3 col-xs-3 text-muted" style="font-size:x-small" ng-cloak>
+                                {{question.Date | date:"d. MMM HH:mm"}}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel panel-info divAskQuestion">
+                <div class="panel-heading">
+                    <h4 style="display:inline-block">
+                        Spør oss
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <form name="formQuestion">
+
+                        <span class="text-info">
+                            Hva er ditt spørsmål?
+                        </span>
+                        <span class="pull-right text-danger" ng-show="formQuestion.question.$invalid">
+                            Skriv inn et spørsmål
+                        </span>
+                        <textarea class="form-control txtQuestion" rows="5" placeholder="Formuler ditt spørsmål her" name="question" ng-model="question" ng-required="true"></textarea>
+
+                        <span class="text-info">
+                            Send svaret til
+                        </span>
+                        @{
+                            var emailregex = "^[_a-z]+[a-z0-9_.]*@[a-z0-9_.]+[.]{1}[a-z]{2,5}$";
+                        }
+                        <input type="text" class="form-control" placeholder="Epost-adresse"
+                               name="email" ng-model="email" ng-required="true"
+                               ng-pattern="/@emailregex/" />
+                        <br />
+                        <p class="text-danger" ng-show="formQuestion.email.$invalid && formQuestion.email.$dirty " ng-cloak>
+                            Skriv inn en gyldig epost-adresse
+                        </p>
+
+
+                        <button ng-disabled="formQuestion.$invalid" class="btn btn-success btnSendQuestion" ng-click="sendQuestion()">
+                            Send
+                        </button>
+                        <span ng-show="attemptSend" ng-class="sendStatusClass" ng-cloak>
+                            {{sendStatusMessage}}
+                        </span>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

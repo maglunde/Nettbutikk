@@ -49,16 +49,8 @@
                     <a href="#LoginModal" data-toggle="modal">Logg inn</a>
                     <span> | </span>
                     <a href="#RegisterModal" data-toggle="modal">Registrer bruker</a>
-                    @*<span> | </span>
-                        <span>@Html.ActionLink("Kategorier", "Index", "Category")</span>
-                        <span> | </span>
-                        <span>@Html.ActionLink("Produkter", "Index", "Product")</span>
-                        <span> | </span>
-                        <span>@Html.ActionLink("Kunder", "Index", "Customer")</span>
-                        <span> | </span>
-                        <span>@Html.ActionLink("Images", "Index", "Image")</span>*@
-
-
+                    <span> | </span>
+                    <span>@Html.ActionLink("FAQ", "Index", "FAQ")</span>
 
                 }
                 else
@@ -69,10 +61,8 @@
                     <span>@Html.ActionLink("Min side", "MyPage", "Account")</span>
                     <span> | </span>
                     <a href="#" id="Logout">Logg ut</a>
-                    if (Admin)
-                    {
-
-                    }
+                    <span> | </span>
+                    <span>@Html.ActionLink("FAQ", "Index", "FAQ")</span>
                 }
             </div>
             <div class="header_shop">
