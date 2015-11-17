@@ -29,7 +29,14 @@ namespace Nettbutikk.Controllers.API
         // GET api/<controller>/5
         public HttpResponseMessage Get(int id)
         {
-            return Request.CreateResponse();
+            List<FAQModel> CategoryQuestions;
+
+            if (id <= 0)
+                CategoryQuestions = _faqBLL.GetFAQs();
+            else
+                CategoryQuestions = _faqBLL.CategoryQuestions(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, CategoryQuestions);
         }
 
         // POST api/<controller>

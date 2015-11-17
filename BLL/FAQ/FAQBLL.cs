@@ -23,14 +23,19 @@ namespace BLL.FAQ
             return _repo.AddFAQ(faq);
         }
 
-        public bool AddUserQuestion(UserQuestionModel question)
+        public bool AddUserQuestion(QuestionModel question)
         {
             return _repo.AddUserQuestion(question);
         }
 
-        public List<UserQuestionModel> AllUserQuestions()
+        public List<QuestionModel> AllUserQuestions()
         {
             return _repo.AllUserQuestions();
+        }
+
+        public List<FAQModel> CategoryQuestions(int id)
+        {
+            return _repo.CategoryQuestions(id);
         }
 
         public List<FAQModel> DeleteFAQ(int id)
@@ -48,9 +53,9 @@ namespace BLL.FAQ
             return _repo.GetAllCategories();
         }
 
-        public List<FAQModel> GetAllFAQs()
+        public List<FAQModel> GetFAQs()
         {
-            return _repo.GetAllFAQs();
+            return _repo.GetFAQs();
         }
 
         public FAQModel GetFAQ(int id)

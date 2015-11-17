@@ -167,6 +167,10 @@
     <Compile Include="Migrations\201511131233038_FAQ.Designer.cs">
       <DependentUpon>201511131233038_FAQ.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511171912464_morefaq.cs" />
+    <Compile Include="Migrations\201511171912464_morefaq.Designer.cs">
+      <DependentUpon>201511171912464_morefaq.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Viewmodels\CartItem.cs" />
     <Compile Include="Viewmodels\CategoryView.cs" />
@@ -309,6 +313,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511131233038_FAQ.resx">
       <DependentUpon>201511131233038_FAQ.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511171912464_morefaq.resx">
+      <DependentUpon>201511171912464_morefaq.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

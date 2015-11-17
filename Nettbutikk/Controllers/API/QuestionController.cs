@@ -39,7 +39,7 @@ namespace Nettbutikk.Controllers.API
         {
             if (ModelState.IsValid)
             {
-                var questionModel = new UserQuestionModel
+                var questionModel = new QuestionModel
                 {
                     Question = question.Question,
                     Email = question.Email

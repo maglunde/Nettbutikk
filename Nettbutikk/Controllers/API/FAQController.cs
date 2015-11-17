@@ -22,7 +22,7 @@ namespace Nettbutikk.Controllers.Api
         // GET api/<controller>
         public HttpResponseMessage Get()
         {
-            var FAQs = _faqBLL.GetAllFAQs();
+            var FAQs = _faqBLL.GetFAQs();
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, FAQs);
             return response;
             //return FAQs;

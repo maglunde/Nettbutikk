@@ -86,6 +86,14 @@ app.controller("faqController", function ($scope, $http) {
 
     }
 
-
-
+    $scope.showCategoryFAQs = function (id) {
+        $http.get(urlCategory + id).then(
+               function (data) {
+                console.log("success " + data.data.length);
+            }, function (data) {
+                console.log("err " + data);
+            }, function (data) {
+                console.log("finally " + data);
+            })
+    }
 })

@@ -14,7 +14,7 @@ namespace DAL.FAQ
             throw new NotImplementedException();
         }
 
-        public bool AddUserQuestion(UserQuestionModel question)
+        public bool AddUserQuestion(QuestionModel question)
         {
             using (var db = new TankshopDbContext())
             {
@@ -38,11 +38,11 @@ namespace DAL.FAQ
             }
         }
 
-        public List<UserQuestionModel> AllUserQuestions()
+        public List<QuestionModel> AllUserQuestions()
         {
             using (var db = new TankshopDbContext())
             {
-                return db.UserQuestions.Select(q => new UserQuestionModel()
+                return db.UserQuestions.Select(q => new QuestionModel()
                 {
                     Answer = q.Answer,
                     Date = q.Date,
@@ -52,6 +52,40 @@ namespace DAL.FAQ
 
                 }).ToList();
             }
+        }
+
+        public List<FAQModel> CategoryQuestions(int id)
+        {
+            List<FAQModel> CategoryQuestions = new List<FAQModel>();
+
+            using (var db = new TankshopDbContext())
+            {
+                try
+                {
+                    var dbCAtQs = db.FAQs.Where(q => q.FAQCategory.FAQCategoryId == id).ToList();
+                    foreach(var q in dbCAtQs)
+                    {
+                        var faq = new FAQModel()
+                        {
+                            Id = q.FAQId,
+                            CategoryId = q.FAQCategory.FAQCategoryId,
+                            CategoryName = q.FAQCategory.Name,
+                            Question = q.Question,
+                            Answer = q.Answer,
+                            Score = q.Score
+                        };
+
+                        CategoryQuestions.Add(faq);
+                    }
+
+                    return CategoryQuestions;
+                }
+                catch(Exception)
+                {
+                    return CategoryQuestions;
+                }
+            }
+
         }
 
         public List<FAQModel> DeleteFAQ(int id)
@@ -94,11 +128,11 @@ namespace DAL.FAQ
             }
         }
 
-        public List<FAQModel> GetAllFAQs()
+        public List<FAQModel> GetFAQs()
         {
             using (var db = new TankshopDbContext())
             {
-                var dbFaqs = db.FAQs.ToList();
+                var dbFaqs = db.FAQs.OrderByDescending(q => q.Score).ToList();
                 var faqs = new List<FAQModel>();
 
                 foreach (var dbFaq in dbFaqs)
@@ -106,10 +140,11 @@ namespace DAL.FAQ
                     var faq = new FAQModel()
                     {
                         Id = dbFaq.FAQId,
+                        CategoryId = dbFaq.FAQCategory.FAQCategoryId,
+                        CategoryName = dbFaq.FAQCategory.Name,
                         Question = dbFaq.Question,
                         Answer = dbFaq.Answer,
-                        CategoryId = dbFaq.FAQCategory.FAQCategoryId,
-                        CategoryName = dbFaq.FAQCategory.Name
+                        Score = dbFaq.Score
                     };
                     faqs.Add(faq);
                 }
