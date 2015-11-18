@@ -19,7 +19,7 @@ namespace Nettbutikk.Model
             catch (Exception err)
             {
                 System.Diagnostics.Debug.WriteLine(err.ToString());
-                throw;
+                //throw;
             }
         }
 
