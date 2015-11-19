@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Nettbutikk.Viewmodels
 {
-    public class UserQuestionView
+    public class QuestionView
     {
         [Required]
         public string Question { get; set; }

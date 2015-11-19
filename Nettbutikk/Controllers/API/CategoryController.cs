@@ -40,7 +40,7 @@ namespace Nettbutikk.Controllers.API
         }
 
         // POST api/<controller>
-        public HttpResponseMessage Post(UserQuestionView question)
+        public HttpResponseMessage Post(QuestionView question)
         {
             return Request.CreateResponse(HttpStatusCode.OK);
         }

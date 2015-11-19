@@ -182,7 +182,7 @@
     <Compile Include="Viewmodels\OrderView.cs" />
     <Compile Include="Viewmodels\ProductView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Viewmodels\UserQuestionView.cs" />
+    <Compile Include="Viewmodels\QuestionView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\TankshopDB.mdf" />

@@ -73,7 +73,7 @@ namespace Nettbutikk.Controllers
                     Price = productModel.Price,
                     Stock = productModel.Stock,
                     //ImageUrl = productModel.ImageUrl,
-                    //CategoryName = productModel.CategoryName
+                    //FAQCategoryName = productModel.FAQCategoryName
                     CategoryId = productModel.CategoryId
                 };
                 productViews.Add(productview);

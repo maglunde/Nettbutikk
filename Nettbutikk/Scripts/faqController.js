@@ -7,7 +7,7 @@ var urlFAQ = "FAQ/"
 
 var app = angular.module("App", []);
 
-app.controller("faqController", function ($scope, $http) {
+app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
     showAllQs();
     showCategories();
@@ -75,24 +75,13 @@ app.controller("faqController", function ($scope, $http) {
         $scope.attemptSend = true;
     }
 
-    $scope.deleteQuestion = function (question) {
-        $http.delete(urlQuestionApi + question.Id)
-            .then(function (response) {
-                showAllQs();
-            },
-             function (response) {
-                 alert(response.data)
-             })
-
-    }
-
     $scope.showCategoryFAQs = function (id) {
         $http.get(urlCategoryApi + id, [cache = true])
             .then(function (response) {
                 $scope.faqs = response.data;
             },
              function (response) {
-                 alert("err: " + response.data);
+                 alert("error: " + response.status + " " + response.data)
              })
     }
 
@@ -102,7 +91,7 @@ app.controller("faqController", function ($scope, $http) {
             var i = $scope.faqs.indexOf(faq);
             $scope.faqs[i].Score++;
         }, function (response) {
-            alert("err: " + response.data);
+            alert("error: " + response.status + " " + response.data)
         });
     }
 
@@ -113,7 +102,83 @@ app.controller("faqController", function ($scope, $http) {
             $scope.faqs[i].Score--;
 
         }, function (response) {
-            alert("err: " + response.data);
+            alert("error: " + response.status + " " + response.data)
         });
     }
-})
+
+    $scope.answerQuestion = function (question) {
+        $scope.handleQuestion = question;
+
+        $scope.showQuestions = false;
+        $scope.showAnswerQuestion = true;
+
+    }
+
+    $scope.includeQuestion = function (question) {
+        $http.post(urlFAQApi, question)
+            .then(function (response) {
+                $http.delete(urlQuestionApi + question.Id)
+                    .then(function (response) {
+                        showAllQs();
+                    },
+                     function (response) {
+                         alert("error: " + response.status + " " + response.data)
+                     })
+
+            },
+            function (response) {
+                alert("error: " + response.status + " " + response.data)
+            })
+
+    }
+
+    $scope.deleteQuestion = function (question) {
+        $http.delete(urlQuestionApi + question.Id)
+            .then(function (response) {
+                showAllQs();
+            },
+             function (response) {
+                 alert("error: " + response.status + " " + response.data)
+             })
+
+    }
+
+
+    $scope.saveAnswer = function () {
+        $scope.showQuestions = true;
+        $scope.showAnswerQuestion = false;
+
+        $http.put(urlQuestionApi + $scope.handleQuestion.Id, $scope.handleQuestion)
+            .then(function (response) {
+                
+            }, function (response) {
+                alert("error: " + response.status + " " + response.data)
+            })
+
+    }
+
+    $scope.cancelSave = function () {
+        $scope.handleQuestion = null;
+        $scope.showQuestions = true;
+        $scope.showAnswerQuestion = false;
+    }
+
+    $scope.deleteFAQ = function (faq) {
+        $http.delete(urlFAQApi + faq.Id)
+            .then(function (response) {
+                showAllQs();
+            }, function (response) {
+                alert("error: " + response.status + " " + response.data)
+            })
+    }
+
+    $scope.editFAQ = function (faq) {
+        ($scope.divEditFAQ + faq.Id) = true;
+
+    }
+
+    $scope.saveFAQ = function(faq)
+    {
+        ($scope.divEditFAQ + faq.Id) = false;
+    }
+}])

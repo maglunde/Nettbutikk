@@ -18,7 +18,7 @@ namespace BLL.FAQ
             _repo = new FAQRepo();
         }
 
-        public List<FAQModel> AddFAQ(FAQModel faq)
+        public bool AddFAQ(FAQModel faq)
         {
             return _repo.AddFAQ(faq);
         }
@@ -38,7 +38,7 @@ namespace BLL.FAQ
             return _repo.CategoryQuestions(id);
         }
 
-        public List<FAQModel> DeleteFAQ(int id)
+        public bool DeleteFAQ(int id)
         {
             return _repo.DeleteFAQ(id);
         }
@@ -86,6 +86,11 @@ namespace BLL.FAQ
         public List<FAQModel> GetFAQs(int categoryid)
         {
             return _repo.GetFAQs(categoryid);
+        }
+
+        public bool UpdateQuestion(int id, QuestionModel question)
+        {
+            return _repo.UpdateQuestion(id, question);
         }
     }
 }

@@ -36,9 +36,13 @@ namespace Nettbutikk.Controllers.Api
         }
 
         // POST api/<controller>
-        public HttpResponseMessage Post(UserQuestionView question)
+        public HttpResponseMessage Post(FAQModel question)
         {
-            return Request.CreateResponse(HttpStatusCode.Created);
+            if(_faqBLL.AddFAQ(question))
+            {
+                return Request.CreateResponse(HttpStatusCode.Created,"Spørsmålet ble satt inn i databasen");
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest,"Kunne ikke sette inn i databasen");
         }
 
         // PUT api/<controller>/5
@@ -51,8 +55,11 @@ namespace Nettbutikk.Controllers.Api
         // DELETE api/<controller>/5
         public HttpResponseMessage Delete(int id)
         {
-            var FAQs = _faqBLL.DeleteFAQ(id);
-            return Request.CreateResponse(HttpStatusCode.OK, FAQs);
+            if(_faqBLL.DeleteFAQ(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK,"FAQ ble slettet fra databasen");
+            }
+            return Request.CreateResponse(HttpStatusCode.NotFound,"Kunne ikke slette FAQ fra databasen");
         }
     }
 }

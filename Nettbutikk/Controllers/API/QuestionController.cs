@@ -35,7 +35,7 @@ namespace Nettbutikk.Controllers.API
         }
 
         // POST api/<controller>
-        public HttpResponseMessage Post(UserQuestionView question)
+        public HttpResponseMessage Post(QuestionView question)
         {
             if (ModelState.IsValid)
             {
@@ -61,9 +61,15 @@ namespace Nettbutikk.Controllers.API
         }
 
         // PUT api/<controller>/5
-        public HttpResponseMessage Put(int id, [FromBody]string value)
+        public HttpResponseMessage Put(int id, QuestionModel question)
         {
-            return Request.CreateResponse();
+            if (_faqBLL.UpdateQuestion(id, question))
+            {
+                var questions = _faqBLL.AllUserQuestions();
+                return Request.CreateResponse(HttpStatusCode.OK, questions);
+
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest,"Kunne ikke lagre oppdateringene");
         }
 
         // DELETE api/<controller>/5

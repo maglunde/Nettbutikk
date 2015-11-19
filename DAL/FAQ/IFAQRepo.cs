@@ -9,11 +9,11 @@ namespace DAL.FAQ
 {
     public interface IFAQRepo
     {
-        List<FAQModel> AddFAQ(FAQModel faq);
+        bool AddFAQ(FAQModel faq);
         List<FAQModel> GetFAQs();
         FAQModel GetFAQ(int id);
         List<FAQModel> UpdateFAQ(int id, FAQModel faq);
-        List<FAQModel> DeleteFAQ(int id);
+        bool DeleteFAQ(int id);
         bool AddUserQuestion(QuestionModel question);
         List<QuestionModel> AllUserQuestions();
         bool DeleteUserQuestion(int id);
@@ -23,5 +23,6 @@ namespace DAL.FAQ
         bool VoteDown(int id);
         FAQCategoryModel getCategoryByFAQ(int id);
         List<FAQModel> GetFAQs(int categoryid);
+        bool UpdateQuestion(int id, QuestionModel question);
     }
 }

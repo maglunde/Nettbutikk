@@ -9,9 +9,29 @@ namespace DAL.FAQ
 {
     public class FAQRepo : IFAQRepo
     {
-        public List<FAQModel> AddFAQ(FAQModel faq)
+        public bool AddFAQ(FAQModel f)
         {
-            throw new NotImplementedException();
+            using (var db = new TankshopDbContext())
+            {
+                try
+                {
+                    var newFAQ = new Nettbutikk.Model.FAQ
+                    {
+                        Answer = f.Answer,
+                        FAQCategoryId = f.FAQCategoryId,
+                        Question = f.Question,
+                        Score = 0
+                    };
+
+                    db.FAQs.Add(newFAQ);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
         }
 
         public bool AddUserQuestion(QuestionModel question)
@@ -48,7 +68,8 @@ namespace DAL.FAQ
                     Date = q.Date,
                     Email = q.Email,
                     Id = q.QuestionId,
-                    Question = q.Question
+                    Question = q.Question,
+                    FAQCategoryId = q.FAQCategoryId
 
                 }).ToList();
             }
@@ -63,13 +84,13 @@ namespace DAL.FAQ
                 try
                 {
                     var dbCAtQs = db.FAQs.Where(q => q.FAQCategory.FAQCategoryId == id).ToList();
-                    foreach(var q in dbCAtQs)
+                    foreach (var q in dbCAtQs)
                     {
                         var faq = new FAQModel()
                         {
                             Id = q.FAQId,
-                            CategoryId = q.FAQCategory.FAQCategoryId,
-                            CategoryName = q.FAQCategory.Name,
+                            FAQCategoryId = q.FAQCategory.FAQCategoryId,
+                            FAQCategoryName = q.FAQCategory.Name,
                             Question = q.Question,
                             Answer = q.Answer,
                             Score = q.Score
@@ -80,7 +101,7 @@ namespace DAL.FAQ
 
                     return CategoryQuestions;
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return CategoryQuestions;
                 }
@@ -88,9 +109,21 @@ namespace DAL.FAQ
 
         }
 
-        public List<FAQModel> DeleteFAQ(int id)
+        public bool DeleteFAQ(int id)
         {
-            throw new NotImplementedException();
+            using (var db = new TankshopDbContext())
+            {
+                try
+                {
+                    db.FAQs.Remove(db.FAQs.Find(id));
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
         }
 
         public bool DeleteUserQuestion(int id)
@@ -122,6 +155,7 @@ namespace DAL.FAQ
                 {
                     Id = c.FAQCategoryId,
                     Name = c.Name
+
                 }).ToList();
 
 
@@ -140,8 +174,8 @@ namespace DAL.FAQ
                     var faq = new FAQModel()
                     {
                         Id = dbFaq.FAQId,
-                        CategoryId = dbFaq.FAQCategory.FAQCategoryId,
-                        CategoryName = dbFaq.FAQCategory.Name,
+                        FAQCategoryId = dbFaq.FAQCategory.FAQCategoryId,
+                        FAQCategoryName = dbFaq.FAQCategory.Name,
                         Question = dbFaq.Question,
                         Answer = dbFaq.Answer,
                         Score = dbFaq.Score
@@ -183,7 +217,7 @@ namespace DAL.FAQ
 
         public bool VoteDown(int id)
         {
-            using(var db = new TankshopDbContext())
+            using (var db = new TankshopDbContext())
             {
                 try
                 {
@@ -204,10 +238,10 @@ namespace DAL.FAQ
         {
             using (var db = new TankshopDbContext())
             {
-                var FAQCategoryId= db.FAQs.Find(id).FAQCategoryId;
+                var FAQCategoryId = db.FAQs.Find(id).FAQCategoryId;
                 return db.FAQCategories.Where(c => c.FAQCategoryId == FAQCategoryId).Select(c => new FAQCategoryModel
                 {
-                    Id = c.FAQCategoryId, 
+                    Id = c.FAQCategoryId,
                     Name = c.Name
                 }).Single();
 
@@ -226,8 +260,8 @@ namespace DAL.FAQ
                     var faq = new FAQModel()
                     {
                         Id = dbFaq.FAQId,
-                        CategoryId = dbFaq.FAQCategory.FAQCategoryId,
-                        CategoryName = dbFaq.FAQCategory.Name,
+                        FAQCategoryId = dbFaq.FAQCategory.FAQCategoryId,
+                        FAQCategoryName = dbFaq.FAQCategory.Name,
                         Question = dbFaq.Question,
                         Answer = dbFaq.Answer,
                         Score = dbFaq.Score
@@ -235,6 +269,29 @@ namespace DAL.FAQ
                     faqs.Add(faq);
                 }
                 return faqs;
+            }
+        }
+
+        public bool UpdateQuestion(int id, QuestionModel question)
+        {
+            using (var db = new TankshopDbContext())
+            {
+                try
+                {
+                    var dbQuestion = db.UserQuestions.Find(id);
+                    dbQuestion.Answer = question.Answer;
+                    dbQuestion.FAQCategoryId = question.FAQCategoryId;
+                    dbQuestion.Question = question.Question;
+                    dbQuestion.Date = question.Date;
+                    dbQuestion.Email = question.Email;
+
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
     }

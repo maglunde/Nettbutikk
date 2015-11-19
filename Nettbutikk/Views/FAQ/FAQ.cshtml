@@ -12,7 +12,7 @@
     <script src="@Url.Content("~/Scripts/faqController.js")"></script>
 }
 
-<div ng-app="App" ng-controller="faqController">
+<div ng-app="App" ng-controller="FAQCtrl">
 
     <a href="~/">Til hovedsiden</a>
     <div class="row">
@@ -34,8 +34,8 @@
                         </li>
                         @foreach (var c in Categories)
                         {
-                            <li role="presentation" >
-                                <a href="#" ng-click="showCategoryFAQs(@c.Id)" >
+                            <li role="presentation">
+                                <a href="#" ng-click="showCategoryFAQs(@c.Id)">
                                     @c.Name
                                 </a>
                             </li>
@@ -51,6 +51,10 @@
                                 </div>
                                 <div class="col-md-10">
                                     <div class="faqQuestion">
+                                        @if (Admin)
+                                        {
+                                            <span class="glyphicon glyphicon-remove text-danger pointer" ng-click="deleteFAQ(faq)" title="Slett spørsmålet"></span>
+                                        }
                                         {{faq.Question}}
                                     </div>
                                 </div>
@@ -63,14 +67,20 @@
 
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="faqAnswer text-muted" >
+                                    <div class="faqAnswer text-muted">
                                         {{faq.Answer}}
+                                        @if (Admin)
+                                        {
+                                            <span ng-show="!divEditFAQ" class="glyphicon glyphicon-edit text-primary pointer" ng-click="editFAQ(faq)" title="Slett spørsmålet"></span>
+                                            <span ng-show="divEditFAQ" class="glyphicon glyphicon-ok-sign text-success pointer" ng-click="saveFAQ(faq)" title="Slett spørsmålet"></span>
+                                            <textarea ng-show="divEditFAQ" class="form-control" ng-model="faq.Answer" rows="3"></textarea>
+                                        }
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="faqRating">
                                         <span class="glyphicon glyphicon-thumbs-up faq-rate faq-rate-plus" ng-click="faqRateUp(faq)"></span>
-                                        <div class="faqScore" >
+                                        <div class="faqScore">
                                             {{faq.Score}}
                                         </div>
                                         <span class="glyphicon glyphicon-thumbs-down faq-rate faq-rate-minus" ng-click="faqRateDown(faq)"> </span>
@@ -104,12 +114,26 @@
                     </div>
                     <div ng-show="showQuestions">
                         <ul class="list-group list-striped list-style-none">
-                            <li ng-repeat="question in questions" class="list-group-item "  ng-cloak>
+                            <li ng-repeat="question in questions" class="list-group-item " ng-cloak>
                                 <div class="row">
                                     <div class="col-md-9 col-xs-9">
                                         @if (Admin)
                                         {
-                                            <span class="glyphicon glyphicon-remove text-danger" ng-click="deleteQuestion(question)"></span>
+                                            <div class="questionAdminOptions">
+                                                <span class="glyphicon glyphicon-edit text-primary pointer answerQuestionGlyph" ng-click="answerQuestion(question)" title="Svar på spørsmålet"></span>
+                                                <span>&nbsp;</span>
+                                                <span class="glyphicon glyphicon-ok-sign text-success pointer includeQuestionGlyph" ng-click="includeQuestion(question)" title="Legg til i FAQ"></span>
+                                                <span>&nbsp;</span>
+                                                <span>&nbsp;</span>
+                                                <span>&nbsp;</span>
+                                                <span class="glyphicon glyphicon-remove-sign text-danger pointer deleteQuestionGlyph" ng-click="deleteQuestion(question) " title="Slett spørsmålet"></span>
+                                                @*<span>&nbsp;</span>
+                                                    <span class="glyphicon glyphicon-remove text-danger pointer" ng-click="deleteQuestion(question)"></span>
+                                                    <span>&nbsp;</span>
+                                                    <span class="glyphicon glyphicon-ok text-success pointer" ng-click="includeQuestion(question)"></span>
+                                                    <span>&nbsp;</span>
+                                                    <span class="glyphicon glyphicon-ok-circle text-success pointer" ng-click="includeQuestion(question)"></span>*@
+                                            </div>
                                         }
                                         <span class="text-primary">
                                             {{question.Question}}
@@ -123,6 +147,31 @@
                                 </div>
                             </li>
                         </ul>
+                    </div>
+                    <div ng-show="showAnswerQuestion" ng-cloak>
+                        <div class=" divQuestion">
+                            <span class="text-primary lblQuestion">
+                                {{handleQuestion.Question}}
+                            </span>
+                            <span class="text-muted pull-right small" title="Innsender">
+                                {{handleQuestion.Email}}
+                            </span>
+                        </div>
+                        <form ng-submit="saveAnswer()" name="formSaveAnswer">
+
+                            <textarea rows="5" ng-model="handleQuestion.Answer" class="form-control txtAnswer" placeholder="Svar på spørsmålet her..." ng-required="true"></textarea>
+                            <br />
+                            <div>Kategori</div>
+                            <select ng-model="handleQuestion.FAQCategoryId" ng-options="category.Id as category.Name for category in categories"
+                                    class="form-control" style="width:150px;float:left;" ng-required="true">
+                                <option style="display:none" value="">
+                                    Velg kategori
+                                </option>
+                            </select>
+                            <span class="btn btn-danger glyphicon glyphicon-remove" ng-click="cancelSave()" style="float:right"></span>
+                            <input type="submit" class="btn btn-success btnSaveAnswer" value="Lagre" style="float:right" ng-disabled="formSaveAnswer.$invalid" />
+                        </form>
+
                     </div>
                 </div>
 
@@ -148,7 +197,7 @@
                             Send svaret til
                         </span>
                         @{
-                            var emailregex = "^[_a-z]+[a-z0-9_.]*@[a-z0-9_]+(.[-a-z0-9_]+)*[.]{1}[a-z]{2,5}$";
+                            var emailregex = "^[_a-z]+[a-z0-9_.]*@[a-z0-9_]+(.[a-z0-9_]+)*[.]{1}[a-z]{2,5}$";
                         }
                         <input type="text" class="form-control" placeholder="Epost-adresse"
                                name="email" ng-model="email" ng-required="true"
@@ -179,5 +228,6 @@
             $(this).siblings().removeClass("active");
             $(this).addClass("active");
         })
+
     })
 </script>

@@ -278,10 +278,12 @@ namespace Nettbutikk.Model
     {
         [Key]
         public int QuestionId { get; set; }
+        public int FAQCategoryId { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
         public string Email { get; set; }
         public DateTime Date { get; set; }
+        
     }
 
 }

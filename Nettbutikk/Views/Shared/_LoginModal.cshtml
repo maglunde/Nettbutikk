@@ -1,9 +1,10 @@
 ﻿@model Nettbutikk.Viewmodels.CustomerLoginPartial
-
 <div id="LoginModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header"><h2>Logg inn</h2></div>
+            <div class="modal-header">
+                <h2 class="modal-title text-primary">Logg inn</h2>
+            </div>
             <div class="modal-body container">
                 <span id="messageLogin" style="color:red"></span>
                 <table class="table-modal">
@@ -30,7 +31,6 @@
                         </td>
                     </tr>
                     <tr>
-
                         <td>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Lukk</button>
                         </td>
@@ -49,25 +49,34 @@
                 </table>
 
 
-
-
-
             </div>
-
         </div>
     </div>
-
 </div>
 @Scripts.Render("~/bundles/jquery")
-
 <script>
     $(document).ready(function () {
+        //$('#LoginModal').on('shown.bs.modal',function(){
+        //    console.log("shown!");
+        //})
+
+        $('#LoginModal').on('shown.bs.modal', function () {
+            $('#LoginModal #Email').focus();
+        })
+
+        $("#LoginModal #Email, #LoginModal #Password").on("keyup", function (e) {
+            if (e.which == 13) // Enter
+            {
+                $("#btnLogin").click();
+            }
+        })
+
         $("button[data-dismiss='modal']").click(function () {
             $("#messageLogin").html("");
         })
 
         $("#btnLogin").click(function () {
-            
+
             var email = $("#Email").val();
             var password = $("#Password").val();
 
@@ -82,6 +91,7 @@
                 success: function (result) {
                     if (result == "False") {
                         $("#messageLogin").html("Feil i brukernavn og/eller passord");
+                        $("#messageLogin").shake();
                     }
                     else if (result == "True") {
                         $("#messageLogin").html("Success");
@@ -93,5 +103,16 @@
 
             })
         })
+        jQuery.fn.shake = function () {
+            console.log("shake")
+            this.each(function (i) {
+                $(this).css({ "position": "relative" });
+                for (var x = 1; x <= 2; x++) {
+                    $(this).animate({ right: 5 }, 10).animate({ top: -5 }, 10).animate({ right: -5 }, 10).animate({ top: 5 }, 10).animate({ right: 0 }, 10).animate({ top: 0 }, 10);
+
+                }
+            });
+            return this;
+        }
     })
 </script>

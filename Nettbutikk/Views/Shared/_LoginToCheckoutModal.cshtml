@@ -1,9 +1,10 @@
 ﻿@model Nettbutikk.Viewmodels.CustomerLoginPartial
-
-<div id="LoginToCheckoutModal" class="modal fade">
+<div id="LoginToCheckoutModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header"><h2>Logg inn for gå til kassen</h2></div>
+            <div class="modal-header">
+                <h3 class="modal-title text-primary" id="myModalLabel">Logg inn for gå til kassen</h3>
+            </div>
             <div class="modal-body container">
                 <span id="messageLoginToCheckout" style="color:red"></span>
                 <table class="table-modal">
@@ -13,7 +14,7 @@
                         </td>
                         <td>
                             @Html.EditorFor(model => model.Email, new { @id = "editEmail" })
-                        </td>
+                        </td> 
                         <td>
                             @Html.ValidationMessageFor(model => model.Email)
                         </td>
@@ -30,7 +31,6 @@
                         </td>
                     </tr>
                     <tr>
-
                         <td>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Lukk</button>
                         </td>
@@ -49,21 +49,29 @@
                 </table>
 
 
-
-
-
             </div>
-
         </div>
     </div>
-
 </div>
 @Scripts.Render("~/bundles/jquery")
-
 <script>
     $(document).ready(function () {
 
-        $("#LoginToCheckoutModal #btnLoginToCheckout").click(function () {
+        //$("#LoginToCheckoutModal").toggle();
+
+        $('#LoginToCheckoutModal').on('shown.bs.modal', function () {
+            $('#LoginToCheckoutModal #Email').focus();
+        })
+
+        $("#LoginToCheckoutModal #Email, #LoginToCheckoutModal #Password").on("keyup", function (e) {
+            if (e.which == 13) // Enter
+            {
+                $("#btnLoginToCheckout").click();
+            }
+        })
+
+
+        $("#btnLoginToCheckout").click(function () {
 
             var email = $("#LoginToCheckoutModal #Email").val();
             var password = $("#LoginToCheckoutModal #Password").val();
@@ -81,6 +89,7 @@
                 success: function (result) {
                     if (result == "False") {
                         $("#messageLoginToCheckout").html("Feil i brukernavn og/eller passord");
+                        $("#messageLoginToCheckout").shake();
                     }
                     else if (result == "True") {
                         $("messageLoginToCheckout").html("Success");

@@ -648,31 +648,33 @@ section {
     color: red;
     right:0;
 }*/
-.faqRating{
-    position:absolute;
-    top:-35px;
-    text-align:center;
+.faqRating {
+    position: absolute;
+    top: -35px;
+    text-align: center;
 }
+
 .faqScore {
-    font-size:2.3em;
+    font-size: 2.3em;
 }
+
 .faqScore, .faq-rate {
-    display:inline;
+    display: inline;
 }
 
 .faq-rate {
-    font-size:1.3em;
+    font-size: 1.3em;
     cursor: pointer;
 }
 
 .faq-rate-plus {
     color: green;
-    left:0;
+    left: 0;
 }
 
 .faq-rate-minus {
     color: red;
-    right:0;
+    right: 0;
 }
 
 .divListUserQuestions {
@@ -683,11 +685,11 @@ section {
 .divAskQuestion {
 }
 
-.txtQuestion {
+.txtQuestion, .txtAnswer {
     resize: none;
 }
 
-.btnSendQuestion {
+.btnSendQuestion, .btnSaveAnswer {
     min-width: 100px;
 }
 
@@ -706,9 +708,29 @@ section {
 }*/
 
 .list-striped > li:nth-of-type(odd) {
-  background-color: #f9f9f9;
+    background-color: #f9f9f9;
 }
 
-.list-style-none{
-    list-style-type:none;
+.list-style-none {
+    list-style-type: none;
+}
+
+.questionAdminOptions {
+    position: absolute;
+    top: -20px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.divQuestion {
+    padding: 5px;
+    background: #f9f9f9;
+}
+
+.lblQuestion {
+    font-size: 1.1em;
+    font-style: italic;
+    font-weight: bold;
 }
