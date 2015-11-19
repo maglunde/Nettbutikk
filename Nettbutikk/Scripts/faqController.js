@@ -161,6 +161,7 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         $scope.handleQuestion = null;
         $scope.showQuestions = true;
         $scope.showAnswerQuestion = false;
+        displayQuestionlistMsg("ingen endringer");
     }
 
     $scope.deleteFAQ = function (faq) {
@@ -173,12 +174,11 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
     }
 
     $scope.editFAQ = function (faq) {
-        ($scope.divEditFAQ + faq.Id) = true;
-
+       
     }
 
     $scope.saveFAQ = function(faq)
     {
-        ($scope.divEditFAQ + faq.Id) = false;
+       
     }
 }])

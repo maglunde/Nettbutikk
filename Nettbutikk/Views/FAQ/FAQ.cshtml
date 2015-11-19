@@ -42,7 +42,8 @@
                         }
                     </ul>
                     <ul class="list-group list-striped">
-                        <li ng-repeat="faq in faqs | orderBy:'-Score'" class="list-group-item" ng-cloak>
+                        <li ng-repeat="faq in faqs" class="list-group-item" ng-cloak>
+                            @*  | orderBy:'-Score' *@
                             <div class="row">
                                 <div class="col-md-1">
                                     <div class="faqQuestion">
@@ -79,11 +80,11 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="faqRating">
-                                        <span class="glyphicon glyphicon-thumbs-up faq-rate faq-rate-plus" ng-click="faqRateUp(faq)"></span>
+                                        <span class="glyphicon glyphicon-thumbs-up  text-success faq-rate faq-rate-plus" ng-click="faqRateUp(faq)"></span>
                                         <div class="faqScore">
                                             {{faq.Score}}
                                         </div>
-                                        <span class="glyphicon glyphicon-thumbs-down faq-rate faq-rate-minus" ng-click="faqRateDown(faq)"> </span>
+                                        <span class="glyphicon glyphicon-thumbs-down text-danger faq-rate faq-rate-minus" ng-click="faqRateDown(faq)"> </span>
                                     </div>
                                 </div>
                             </div>
@@ -99,9 +100,16 @@
         <div class="col-md-4">
             <div class="panel panel-info divListUserQuestions">
                 <div class="panel-heading">
-                    <h4 style="display:inline-block">
+                    <h4 style="display:inline-block" onclick="displayQuestionlistMsg('lagret')">
                         Venter på svar
                     </h4>
+                    <div class="boxHidden">
+                        <div id="divAdminQuestionlistMessage" class="adminQuestionlistMessage text-center text-danger">
+                            <span class="adminQuestionlistMessage"></span>
+                            <span>&nbsp;</span>
+                            <span id="adminQuestionlistMessageClose" class="glyphicon glyphicon-ok text-success pointer"></span>
+                        </div>
+                    </div>
                     <h4 class="pull-right" ng-show="loadingQuestions" style="display:inline-block">
                         Henter data...
                     </h4>
@@ -127,12 +135,6 @@
                                                 <span>&nbsp;</span>
                                                 <span>&nbsp;</span>
                                                 <span class="glyphicon glyphicon-remove-sign text-danger pointer deleteQuestionGlyph" ng-click="deleteQuestion(question) " title="Slett spørsmålet"></span>
-                                                @*<span>&nbsp;</span>
-                                                    <span class="glyphicon glyphicon-remove text-danger pointer" ng-click="deleteQuestion(question)"></span>
-                                                    <span>&nbsp;</span>
-                                                    <span class="glyphicon glyphicon-ok text-success pointer" ng-click="includeQuestion(question)"></span>
-                                                    <span>&nbsp;</span>
-                                                    <span class="glyphicon glyphicon-ok-circle text-success pointer" ng-click="includeQuestion(question)"></span>*@
                                             </div>
                                         }
                                         <span class="text-primary">
@@ -228,6 +230,44 @@
             $(this).siblings().removeClass("active");
             $(this).addClass("active");
         })
-
     })
+
+    function displayQuestionlistMsg(message) {
+        var elem = $("#divAdminQuestionlistMessage");
+        var box = elem.closest(".boxHidden");
+        var msg = elem.find(".adminQuestionlistMessage");
+
+        msg.text(message);
+
+        var leaveTime = 3000;
+        $("#adminQuestionlistMessageClose").click(function () {
+            elem.removeClass("enterLeft");
+            elem.addClass("leaveLeft");
+
+            setTimeout(function () {
+                box.removeClass("enterTop")
+                box.addClass("leaveTop")
+            }, 500);
+            return;
+        })
+
+        box.removeClass("leaveTop")
+        box.addClass("enterTop")
+        setTimeout(function () {
+            elem.removeClass("leaveLeft");
+            elem.addClass("enterLeft");
+
+        },200)
+
+        setTimeout(function () {
+            elem.removeClass("enterLeft");
+            elem.addClass("leaveLeft");
+
+            setTimeout(function () {
+                box.removeClass("enterTop")
+                box.addClass("leaveTop")
+            }, 500);
+        }, leaveTime);
+        
+    }
 </script>
