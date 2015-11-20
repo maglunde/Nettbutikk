@@ -120,6 +120,7 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
                 $http.delete(urlQuestionApi + question.Id)
                     .then(function (response) {
                         showAllQs();
+                        displayQuestionlistMsg("Spørmålet ble inkludert i FAQ");
                     },
                      function (response) {
                          alert("error: " + response.status + " " + response.data)
@@ -136,6 +137,7 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         $http.delete(urlQuestionApi + question.Id)
             .then(function (response) {
                 showAllQs();
+                displayQuestionlistMsg("Spørsmål slettet");
             },
              function (response) {
                  alert("error: " + response.status + " " + response.data)
@@ -150,7 +152,7 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
         $http.put(urlQuestionApi + $scope.handleQuestion.Id, $scope.handleQuestion)
             .then(function (response) {
-                
+                displayQuestionlistMsg("Svar lagret");
             }, function (response) {
                 alert("error: " + response.status + " " + response.data)
             })
@@ -161,7 +163,7 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         $scope.handleQuestion = null;
         $scope.showQuestions = true;
         $scope.showAnswerQuestion = false;
-        displayQuestionlistMsg("ingen endringer");
+        displayQuestionlistMsg("Ingen endringer");
     }
 
     $scope.deleteFAQ = function (faq) {

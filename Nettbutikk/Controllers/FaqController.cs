@@ -23,7 +23,7 @@ namespace Nettbutikk.Controllers
         public ActionResult Index()
         {
             ViewBag.Categories = _faqBLL.GetAllCategories();
-            return View("FAQ");
+            return View();
         }
 
         [HttpPost]

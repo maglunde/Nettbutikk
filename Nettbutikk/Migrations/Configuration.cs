@@ -143,7 +143,24 @@ namespace Nettbutikk.Migrations
                 }
             );
 
-
+            context.UserQuestions.AddOrUpdate(
+                new UserQuestion
+                {
+                    Question = "Hvor ofte får dere nye varer?",
+                    Email = "kari@nordmann.no",
+                    Date = new DateTime(2015, gen.Next(8, 10), gen.Next(1, 30), gen.Next(1, 23), gen.Next(1, 59), gen.Next(1, 59))
+                }, new UserQuestion
+                {
+                    Question = "Hva er nummeret til kundeservicen deres? ",
+                    Email = "bjørn@farlund.no",
+                    Date = new DateTime(2015, gen.Next(8, 10), gen.Next(1, 30), gen.Next(1, 23), gen.Next(1, 59), gen.Next(1, 59))
+                }, new UserQuestion
+                {
+                    Question = "Har dere noen atomvåpen til salgs snart?",
+                    Email = "kim@jong_il.nk",
+                    Date = new DateTime(2015, gen.Next(8, 10), gen.Next(1, 30), gen.Next(1, 23), gen.Next(1, 59), gen.Next(1, 59))
+                }
+            );
 
 
 

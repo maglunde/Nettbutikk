@@ -753,20 +753,20 @@ section {
 
 .enterLeft {
     left: 0 !important;
-    transition: .5s cubic-bezier(.1,.9,.1,.9);
+    transition: .3s cubic-bezier(.1,.9,.1,.9);
 }
 
 .leaveLeft {
-    left: 100% !important;
-    transition: .5s cubic-bezier(.9,.1,.9,.1);
+    height:0 !important;
+    transition: .3s cubic-bezier(.9,.1,.9,.1);
 }
 
 .enterTop {
     height: 25px !important;
-    transition: .5s;
+    transition: .3s;
 }
 
 .leaveTop {
     height: 0 !important;
-    transition: .5s;
+    transition: .3s;
 }

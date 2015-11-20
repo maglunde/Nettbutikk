@@ -285,7 +285,7 @@
     <Content Include="Views\Category\EditCategory.cshtml" />
     <Content Include="Views\Category\ListCategory.cshtml" />
     <Content Include="Views\Shared\_LoginToCheckoutModal.cshtml" />
-    <Content Include="Views\FAQ\FAQ.cshtml" />
+    <Content Include="Views\FAQ\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
