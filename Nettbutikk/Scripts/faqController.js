@@ -13,8 +13,6 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
     $scope.showFaqs = false;
     $scope.showQuestions = false;
     $scope.attemptSend = false;
-    $scope.loadingCategories = true;
-    $scope.showCategories = false;
 
 
     /************ FAQs ************/
@@ -43,14 +41,18 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
             },
             function (response) {
-                alert("error: " + response.status + " " + response.data)
+                if (response.status == 400)
+                    displayQuestionlistMsg("Feil. Sjekk at spørsmålet er besvart.");
+                else
+                    alert("error: " + response.status + " " + response.data)
             }
         )
     }
 
     // FAQ - put
-    $scope.faqRateUp = function (faq) {
-        ++faq.Score;
+    $scope.putFAQ = function(faq){
+
+        //console.log(faq);return;
 
         $http.put(urlFAQApi + faq.Id, faq)
         .then(function (response) {
@@ -60,16 +62,7 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         });
     }
 
-    $scope.faqRateDown = function (faq) {
-        --faq.Score;
-
-        $http.put(urlFAQApi + faq.Id, faq)
-        .then(function (response) {
-
-        }, function (response) {
-            alert("error: " + response.status + " " + response.data)
-        });
-    }
+    
 
     // FAQ - delete
     $scope.deleteFAQ = function (faq) {
@@ -169,6 +162,32 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
 
     /************ MISC ************/
+    $scope.editFAQ = function (faq) {
+        faq.editAnswer = faq.Answer;
+        faq.edit = true;
+    }
+
+    $scope.saveFAQ = function (faq) {
+        faq.edit = false;
+        faq.Answer = faq.editAnswer;
+        $scope.putFAQ(faq);
+    }
+    
+    $scope.cancelSaveFAQ = function(faq)
+    {
+        faq.edit = false;
+    }
+
+    $scope.faqRateUp = function (faq) {
+        ++faq.Score;
+        $scope.putFAQ(faq);
+
+    }
+
+    $scope.faqRateDown = function (faq) {
+        --faq.Score;
+        $scope.putFAQ(faq);
+    }
 
     $scope.answerQuestion = function (question) {
         $scope.handleQuestion = question;
@@ -177,10 +196,6 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         $scope.showAnswerQuestion = true;
 
     }
-
-
-
-
 
     $scope.cancelSave = function () {
         $scope.handleQuestion = null;
@@ -191,17 +206,8 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
 
 
-    $scope.editFAQ = function (faq) {
-        $scope.test();
-    }
+ 
 
-    $scope.saveFAQ = function (faq) {
-
-    }
-
-    $scope.test = function () {
-        alert("test");
-    }
 
     /************ List ************/
 
@@ -216,12 +222,10 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         $scope.showQuestions = true;
 
     }
-    function showCategories() {
-        $scope.GetAllCategories();
-        $scope.loadingCategories = false;
-        $scope.showCategories = true;
 
-    }
+
+    /********** Startup **********/
+
     showAllQs();
-    showCategories();
+    $scope.GetAllCategories();
 }])

@@ -38,7 +38,7 @@ namespace Nettbutikk.Controllers.Api
         // POST api/<controller>
         public HttpResponseMessage Post(FAQModel question)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && question.Answer != null && question.Answer != "")
             {
                 if (_faqBLL.AddFAQ(question))
                 {

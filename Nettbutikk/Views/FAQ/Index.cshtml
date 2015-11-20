@@ -72,9 +72,11 @@
                                         {{faq.Answer}}
                                         @if (Admin)
                                         {
-                                            <span ng-show="!divEditFAQ" class="glyphicon glyphicon-edit text-primary pointer" ng-click="editFAQ(faq)" title="Slett spørsmålet"></span>
-                                            <span ng-show="divEditFAQ" class="glyphicon glyphicon-ok-sign text-success pointer" ng-click="saveFAQ(faq)" title="Slett spørsmålet"></span>
-                                            <textarea ng-show="divEditFAQ" class="form-control" ng-model="faq.Answer" rows="3"></textarea>
+                                            <span ng-show="! faq.edit" class="glyphicon glyphicon-edit text-primary pointer" ng-click="editFAQ(faq)" title="Slett spørsmålet"></span>
+                                            <textarea ng-show="faq.edit" class="form-control noresize" ng-model="faq.editAnswer" rows="3"></textarea>
+                                            <span ng-show=" faq.edit" class="glyphicon glyphicon-ok-sign large text-success pointer" ng-click="saveFAQ(faq)" title="Lagre svar"></span>
+                                            <span ng-show=" faq.edit" class="glyphicon glyphicon-remove-sign large text-danger pointer" ng-click="cancelSaveFAQ(faq)" title="Avbryt"></span>
+
                                         }
                                     </div>
                                 </div>
@@ -104,7 +106,7 @@
                         Venter på svar
                     </h4>
                     <div id="divAdminQuestionlistMessage">
-                        <div id="adminQuestionlistMessage" class="text-danger">test</div>
+                        <div id="adminQuestionlistMessage" class="text-danger"></div>
                     </div>
 
                     <h4 class="pull-right" ng-show="loadingQuestions" style="display:inline-block">
@@ -112,7 +114,7 @@
                     </h4>
                 </div>
                 <div class="panel-body">
-                    <div ng-show="questions.length == 0" ng-cloak>
+                    <div ng-show="pendingQuestions.length == 0" ng-cloak>
                         <span class="text-muted">
                             Ingen ubesvarte spørsmål
                         </span>
@@ -158,7 +160,7 @@
                         </div>
                         <form ng-submit="saveAnswer()" name="formSaveAnswer">
 
-                            <textarea rows="5" ng-model="handleQuestion.Answer" class="form-control txtAnswer" placeholder="Svar på spørsmålet her..." ng-required="true"></textarea>
+                            <textarea rows="5" ng-model="handleQuestion.Answer" class="form-control noresize" placeholder="Svar på spørsmålet her..." ng-required="true"></textarea>
                             <br />
                             <div>Kategori</div>
                             <select ng-model="handleQuestion.FAQCategoryId" ng-options="category.Id as category.Name for category in categories"
@@ -190,7 +192,7 @@
                         <span class="pull-right text-danger" ng-show="formQuestion.question.$invalid && formQuestion.question.$dirty" ng-cloak>
                             Skriv inn et spørsmål
                         </span>
-                        <textarea class="form-control txtQuestion" rows="5" placeholder="Formuler ditt spørsmål her" name="question" ng-model="question" ng-required="true"></textarea>
+                        <textarea class="form-control noresize" rows="5" placeholder="Formuler ditt spørsmål her" name="question" ng-model="question" ng-required="true"></textarea>
 
                         <span class="text-info">
                             Send svaret til
