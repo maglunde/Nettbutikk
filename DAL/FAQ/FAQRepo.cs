@@ -40,7 +40,7 @@ namespace DAL.FAQ
             {
                 try
                 {
-                    var newQuestion = new UserQuestion()
+                    var newQuestion = new PendingQuestion()
                     {
                         Question = question.Question,
                         Date = DateTime.Now,
