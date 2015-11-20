@@ -44,7 +44,7 @@ namespace Nettbutikk.Model
         // FAQ
         public virtual DbSet<FAQCategory> FAQCategories { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
-        public virtual DbSet<UserQuestion> UserQuestions { get; set; }
+        public virtual DbSet<PendingQuestion> UserQuestions { get; set; }
 
     }
 
@@ -274,7 +274,7 @@ namespace Nettbutikk.Model
         public virtual FAQCategory FAQCategory { get; set; }
     }
 
-    public class UserQuestion
+    public class PendingQuestion
     {
         [Key]
         public int QuestionId { get; set; }

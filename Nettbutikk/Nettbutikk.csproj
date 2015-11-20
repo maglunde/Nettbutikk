@@ -160,17 +160,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511082038219_InitialMigrations.cs" />
-    <Compile Include="Migrations\201511082038219_InitialMigrations.Designer.cs">
-      <DependentUpon>201511082038219_InitialMigrations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511131233038_FAQ.cs" />
-    <Compile Include="Migrations\201511131233038_FAQ.Designer.cs">
-      <DependentUpon>201511131233038_FAQ.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511171912464_morefaq.cs" />
-    <Compile Include="Migrations\201511171912464_morefaq.Designer.cs">
-      <DependentUpon>201511171912464_morefaq.cs</DependentUpon>
+    <Compile Include="Migrations\201511201633109_Initial.cs" />
+    <Compile Include="Migrations\201511201633109_Initial.Designer.cs">
+      <DependentUpon>201511201633109_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Viewmodels\CartItem.cs" />
@@ -185,10 +177,6 @@
     <Compile Include="Viewmodels\QuestionView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\TankshopDB.mdf" />
-    <Content Include="App_Data\TankshopDB_log.ldf">
-      <DependentUpon>TankshopDB.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -288,7 +276,9 @@
     <Content Include="Views\FAQ\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -311,14 +301,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511082038219_InitialMigrations.resx">
-      <DependentUpon>201511082038219_InitialMigrations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511131233038_FAQ.resx">
-      <DependentUpon>201511131233038_FAQ.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511171912464_morefaq.resx">
-      <DependentUpon>201511171912464_morefaq.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511201633109_Initial.resx">
+      <DependentUpon>201511201633109_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
