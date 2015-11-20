@@ -119,7 +119,7 @@
                     </div>
                     <div ng-show="showQuestions">
                         <ul class="list-group list-striped list-style-none">
-                            <li ng-repeat="question in questions | orderBy:'-Date'" class="list-group-item " ng-cloak>
+                            <li ng-repeat="question in pendingQuestions | orderBy:'-Date'" class="list-group-item " ng-cloak>
                                 <div class="row">
                                     <div class="col-md-9 col-xs-9">
                                         @if (Admin)

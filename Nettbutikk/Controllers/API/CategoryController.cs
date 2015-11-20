@@ -34,7 +34,7 @@ namespace Nettbutikk.Controllers.API
             if (id <= 0)
                 CategoryQuestions = _faqBLL.GetFAQs();
             else
-                CategoryQuestions = _faqBLL.CategoryQuestions(id);
+                CategoryQuestions = _faqBLL.GetFAQs(id);
 
             return Request.CreateResponse(HttpStatusCode.OK, CategoryQuestions);
         }

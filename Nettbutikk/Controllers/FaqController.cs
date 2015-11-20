@@ -25,23 +25,5 @@ namespace Nettbutikk.Controllers
             ViewBag.Categories = _faqBLL.GetAllCategories();
             return View();
         }
-
-        [HttpPost]
-        public JsonResult VoteUp(int id)
-        {
-            _faqBLL.VoteUp(id);
-            var category = _faqBLL.getCategoryByFAQ(id);
-            var json = Json(_faqBLL.GetFAQs(category.Id));
-            return json;
-        }
-
-        [HttpPost]
-        public JsonResult VoteDown(int id)
-        {
-            _faqBLL.VoteDown(id);
-            var category = _faqBLL.getCategoryByFAQ(id);
-            var json = Json(_faqBLL.GetFAQs(category.Id));
-            return json;
-        }
     }
 }

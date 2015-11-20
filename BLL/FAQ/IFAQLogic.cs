@@ -9,21 +9,17 @@ namespace BLL.FAQ
 {
    public interface IFAQLogic
     {
-        // CRUD
         bool AddFAQ(FAQModel faq);
-        List<FAQModel> GetFAQs();
-        FAQModel GetFAQ(int id);
-        List<FAQModel> UpdateFAQ(int id, FAQModel faq);
+        bool AddPendingQuestion(QuestionModel question);
+        List<QuestionModel> AllPendingQuestions();
         bool DeleteFAQ(int id);
-        bool AddUserQuestion(QuestionModel question);
-        List<QuestionModel> AllUserQuestions();
-        bool DeleteUserQuestion(int id);
+        bool DeletePendingQuestion(int id);
         List<FAQCategoryModel> GetAllCategories();
-        List<FAQModel> CategoryQuestions(int id);
-        bool VoteUp(int id);
-        bool VoteDown(int id);
-        FAQCategoryModel getCategoryByFAQ(int id);
+        FAQCategoryModel GetCategoryByFAQ(int id);
+        FAQModel GetFAQ(int id);
+        List<FAQModel> GetFAQs();
         List<FAQModel> GetFAQs(int categoryid);
-        bool UpdateQuestion(int id, QuestionModel question);
+        bool UpdateFAQ(int id, FAQModel faq);
+        bool UpdatePendingQuestion(int id, QuestionModel question);
     }
 }

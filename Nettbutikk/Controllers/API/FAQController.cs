@@ -38,11 +38,15 @@ namespace Nettbutikk.Controllers.Api
         // POST api/<controller>
         public HttpResponseMessage Post(FAQModel question)
         {
-            if(_faqBLL.AddFAQ(question))
+            if (ModelState.IsValid)
             {
-                return Request.CreateResponse(HttpStatusCode.Created,"Spørsmålet ble satt inn i databasen");
+                if (_faqBLL.AddFAQ(question))
+                {
+                    return Request.CreateResponse(HttpStatusCode.Created, "Spørsmålet ble satt inn i databasen");
+                }
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Kunne ikke sette inn i databasen");
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest,"Kunne ikke sette inn i databasen");
+            return Request.CreateResponse(HttpStatusCode.BadRequest,"Feil i modellen, kontroller data");
         }
 
         // PUT api/<controller>/5

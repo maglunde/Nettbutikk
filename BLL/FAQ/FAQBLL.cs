@@ -23,19 +23,14 @@ namespace BLL.FAQ
             return _repo.AddFAQ(faq);
         }
 
-        public bool AddUserQuestion(QuestionModel question)
+        public bool AddPendingQuestion(QuestionModel question)
         {
-            return _repo.AddUserQuestion(question);
+            return _repo.AddPendingQuestion(question);
         }
 
-        public List<QuestionModel> AllUserQuestions()
+        public List<QuestionModel> AllPendingQuestions()
         {
-            return _repo.AllUserQuestions();
-        }
-
-        public List<FAQModel> CategoryQuestions(int id)
-        {
-            return _repo.CategoryQuestions(id);
+            return _repo.AllPendingQuestions();
         }
 
         public bool DeleteFAQ(int id)
@@ -43,9 +38,9 @@ namespace BLL.FAQ
             return _repo.DeleteFAQ(id);
         }
 
-        public bool DeleteUserQuestion(int id)
+        public bool DeletePendingQuestion(int id)
         {
-            return _repo.DeleteUserQuestion(id);
+            return _repo.DeletePendingQuestion(id);
         }
 
         public List<FAQCategoryModel> GetAllCategories()
@@ -63,24 +58,14 @@ namespace BLL.FAQ
             return _repo.GetFAQ(id);
         }
 
-        public List<FAQModel> UpdateFAQ(int id, FAQModel faq)
+        public bool UpdateFAQ(int id, FAQModel faq)
         {
             return _repo.UpdateFAQ(id, faq);
         }
 
-        public bool VoteUp(int id)
+        public FAQCategoryModel GetCategoryByFAQ(int id)
         {
-            return _repo.VoteUp(id);
-        }
-
-        public bool VoteDown(int id)
-        {
-            return _repo.VoteDown(id);
-        }
-
-        public FAQCategoryModel getCategoryByFAQ(int id)
-        {
-            return _repo.getCategoryByFAQ(id);
+            return _repo.GetCategoryByFAQ(id);
         }
 
         public List<FAQModel> GetFAQs(int categoryid)
@@ -88,9 +73,9 @@ namespace BLL.FAQ
             return _repo.GetFAQs(categoryid);
         }
 
-        public bool UpdateQuestion(int id, QuestionModel question)
+        public bool UpdatePendingQuestion(int id, QuestionModel question)
         {
-            return _repo.UpdateQuestion(id, question);
+            return _repo.UpdatePendingQuestion(id, question);
         }
     }
 }

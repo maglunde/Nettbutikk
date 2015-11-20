@@ -34,7 +34,7 @@ namespace DAL.FAQ
             }
         }
 
-        public bool AddUserQuestion(QuestionModel question)
+        public bool AddPendingQuestion(QuestionModel question)
         {
             using (var db = new TankshopDbContext())
             {
@@ -58,7 +58,7 @@ namespace DAL.FAQ
             }
         }
 
-        public List<QuestionModel> AllUserQuestions()
+        public List<QuestionModel> AllPendingQuestions()
         {
             using (var db = new TankshopDbContext())
             {
@@ -73,40 +73,6 @@ namespace DAL.FAQ
 
                 }).ToList();
             }
-        }
-
-        public List<FAQModel> CategoryQuestions(int id)
-        {
-            List<FAQModel> CategoryQuestions = new List<FAQModel>();
-
-            using (var db = new TankshopDbContext())
-            {
-                try
-                {
-                    var dbCAtQs = db.FAQs.Where(q => q.FAQCategory.FAQCategoryId == id).ToList();
-                    foreach (var q in dbCAtQs)
-                    {
-                        var faq = new FAQModel()
-                        {
-                            Id = q.FAQId,
-                            FAQCategoryId = q.FAQCategory.FAQCategoryId,
-                            FAQCategoryName = q.FAQCategory.Name,
-                            Question = q.Question,
-                            Answer = q.Answer,
-                            Score = q.Score
-                        };
-
-                        CategoryQuestions.Add(faq);
-                    }
-
-                    return CategoryQuestions;
-                }
-                catch (Exception)
-                {
-                    return CategoryQuestions;
-                }
-            }
-
         }
 
         public bool DeleteFAQ(int id)
@@ -126,7 +92,7 @@ namespace DAL.FAQ
             }
         }
 
-        public bool DeleteUserQuestion(int id)
+        public bool DeletePendingQuestion(int id)
         {
             using (var db = new TankshopDbContext())
             {
@@ -162,6 +128,25 @@ namespace DAL.FAQ
             }
         }
 
+        public FAQCategoryModel GetCategoryByFAQ(int id)
+        {
+            using (var db = new TankshopDbContext())
+            {
+                var FAQCategoryId = db.FAQs.Find(id).FAQCategoryId;
+                return db.FAQCategories.Where(c => c.FAQCategoryId == FAQCategoryId).Select(c => new FAQCategoryModel
+                {
+                    Id = c.FAQCategoryId,
+                    Name = c.Name
+                }).Single();
+
+            }
+        }
+
+        public FAQModel GetFAQ(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<FAQModel> GetFAQs()
         {
             using (var db = new TankshopDbContext())
@@ -186,73 +171,11 @@ namespace DAL.FAQ
             }
         }
 
-        public FAQModel GetFAQ(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<FAQModel> UpdateFAQ(int id, FAQModel faq)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool VoteUp(int id)
-        {
-            using (var db = new TankshopDbContext())
-            {
-                try
-                {
-                    var faq = db.FAQs.Find(id);
-                    if (faq == null) return false;
-                    faq.Score++;
-                    db.SaveChanges();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
-
-        public bool VoteDown(int id)
-        {
-            using (var db = new TankshopDbContext())
-            {
-                try
-                {
-                    var faq = db.FAQs.Find(id);
-                    if (faq == null) return false;
-                    faq.Score--;
-                    db.SaveChanges();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
-
-        public FAQCategoryModel getCategoryByFAQ(int id)
-        {
-            using (var db = new TankshopDbContext())
-            {
-                var FAQCategoryId = db.FAQs.Find(id).FAQCategoryId;
-                return db.FAQCategories.Where(c => c.FAQCategoryId == FAQCategoryId).Select(c => new FAQCategoryModel
-                {
-                    Id = c.FAQCategoryId,
-                    Name = c.Name
-                }).Single();
-
-            }
-        }
-
         public List<FAQModel> GetFAQs(int categoryid)
         {
             using (var db = new TankshopDbContext())
             {
-                var dbFaqs = db.FAQs.Where(f => f.FAQCategoryId == categoryid).ToList();
+                var dbFaqs = db.FAQs.Where(f => f.FAQCategoryId == categoryid).OrderByDescending(q => q.Score).ToList();
                 var faqs = new List<FAQModel>();
 
                 foreach (var dbFaq in dbFaqs)
@@ -272,7 +195,32 @@ namespace DAL.FAQ
             }
         }
 
-        public bool UpdateQuestion(int id, QuestionModel question)
+        public bool UpdateFAQ(int id, FAQModel faq)
+        {
+            using (var db = new TankshopDbContext())
+            {
+                try
+                {
+                    var f = db.FAQs.Find(id);
+                    if (f == null)
+                        return false;
+
+                    f.Answer = faq.Answer;
+                    f.FAQCategoryId = faq.FAQCategoryId;
+                    f.Question = faq.Question;
+                    f.Score = faq.Score;
+
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool UpdatePendingQuestion(int id, QuestionModel question)
         {
             using (var db = new TankshopDbContext())
             {

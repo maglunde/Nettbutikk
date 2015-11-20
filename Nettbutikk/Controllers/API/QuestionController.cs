@@ -22,7 +22,7 @@ namespace Nettbutikk.Controllers.API
         // GET api/<controller>
         public HttpResponseMessage Get()
         {
-            var Questions = _faqBLL.AllUserQuestions();
+            var Questions = _faqBLL.AllPendingQuestions();
             Questions.Reverse();
 
             return Request.CreateResponse(HttpStatusCode.OK, Questions);
@@ -45,9 +45,9 @@ namespace Nettbutikk.Controllers.API
                     Email = question.Email
                 };
 
-                if (_faqBLL.AddUserQuestion(questionModel))
+                if (_faqBLL.AddPendingQuestion(questionModel))
                 {
-                    var Questions = _faqBLL.AllUserQuestions();
+                    var Questions = _faqBLL.AllPendingQuestions();
                     Questions.Reverse();
 
                     return Request.CreateResponse(HttpStatusCode.Created, Questions);
@@ -63,9 +63,9 @@ namespace Nettbutikk.Controllers.API
         // PUT api/<controller>/5
         public HttpResponseMessage Put(int id, QuestionModel question)
         {
-            if (_faqBLL.UpdateQuestion(id, question))
+            if (_faqBLL.UpdatePendingQuestion(id, question))
             {
-                var questions = _faqBLL.AllUserQuestions();
+                var questions = _faqBLL.AllPendingQuestions();
                 return Request.CreateResponse(HttpStatusCode.OK, questions);
 
             }
@@ -75,9 +75,9 @@ namespace Nettbutikk.Controllers.API
         // DELETE api/<controller>/5
         public HttpResponseMessage Delete(int id)
         {
-            if (_faqBLL.DeleteUserQuestion(id))
+            if (_faqBLL.DeletePendingQuestion(id))
             {
-                var Questions = _faqBLL.AllUserQuestions();
+                var Questions = _faqBLL.AllPendingQuestions();
                 Questions.Reverse();
 
                 return Request.CreateResponse(HttpStatusCode.OK, Questions);
