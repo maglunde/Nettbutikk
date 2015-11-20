@@ -9,9 +9,6 @@ var app = angular.module("App", []);
 
 app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
-    showAllQs();
-    showCategories();
-
     $scope.loading = true;
     $scope.showFaqs = false;
     $scope.showQuestions = false;
@@ -19,76 +16,39 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
     $scope.loadingCategories = true;
     $scope.showCategories = false;
 
-    /* List */
 
-    function showCategories() {
-        $http.get(urlCategoryApi)
-            .then(function (response) {
-                $scope.categories = response.data;
-                $scope.loadingCategories = false;
-                $scope.showCategories = true;
-            }, function (response) {
-                alert(data);
-            });
-    }
+    /************ FAQs ************/
 
-    function showAllQs() {
-
+    // FAQ - get (all)
+    $scope.GetAllFAQs = function () {
         $http.get(urlFAQApi)
             .then(function (response) {
                 $scope.faqs = response.data;
-                $scope.loadingFAQ = false;
-                $scope.showFaqs = true;
-
             }
         );
-
-
-        $http.get(urlQuestionApi)
-            .then(function (response) {
-                $scope.pendingQuestions = response.data;
-                $scope.loadingQuestions = false;
-                $scope.showQuestions = true;
-            }
-        );
-
-
     }
 
-
-
-    $scope.sendQuestion = function () {
-        var pendingQuestion = {
-            Question: $scope.question,
-            Email: $scope.email
-        };
-
-        $http.post(urlQuestionApi, pendingQuestion)
+    // FAQ - post
+    $scope.includeQuestion = function (question) {
+        $http.post(urlFAQApi, question)
             .then(function (response) {
-                $scope.pendingQuestions = response.data;
-                $scope.sendStatusMessage = "Spørsmålet ble sendt";
-                $scope.sendStatusClass = "text-success"
+                $http.delete(urlQuestionApi + question.Id)
+                    .then(function (response) {
+                        showAllQs();
+                        displayQuestionlistMsg("Spørmålet ble inkludert i FAQ");
+                    },
+                     function (response) {
+                         alert("error: " + response.status + " " + response.data)
+                     })
 
-                $scope.question = "";
-                $scope.email = "";
-                $scope.formQuestion.$setPristine();
-            }, function (response) {
-                $scope.sendStatusMessage = "Feil ved innsending";
-                $scope.sendStatusClass = "text-danger"
-            });
-        $scope.attemptSend = true;
-    }
-
-    $scope.showCategoryFAQs = function (id) {
-        $http.get(urlCategoryApi + id)
-            .then(function (response) {
-                $scope.faqs = response.data;
             },
-             function (response) {
-                 alert("error: " + response.status + " " + response.data)
-             })
+            function (response) {
+                alert("error: " + response.status + " " + response.data)
+            }
+        )
     }
 
+    // FAQ - put
     $scope.faqRateUp = function (faq) {
         ++faq.Score;
 
@@ -111,46 +71,51 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         });
     }
 
-    $scope.answerQuestion = function (question) {
-        $scope.handleQuestion = question;
-
-        $scope.showQuestions = false;
-        $scope.showAnswerQuestion = true;
-
-    }
-
-    $scope.includeQuestion = function (question) {
-        $http.post(urlFAQApi, question)
-            .then(function (response) {
-                $http.delete(urlQuestionApi + question.Id)
-                    .then(function (response) {
-                        showAllQs();
-                        displayQuestionlistMsg("Spørmålet ble inkludert i FAQ");
-                    },
-                     function (response) {
-                         alert("error: " + response.status + " " + response.data)
-                     })
-
-            },
-            function (response) {
-                alert("error: " + response.status + " " + response.data)
-            })
-
-    }
-
-    $scope.deleteQuestion = function (question) {
-        $http.delete(urlQuestionApi + question.Id)
+    // FAQ - delete
+    $scope.deleteFAQ = function (faq) {
+        $http.delete(urlFAQApi + faq.Id)
             .then(function (response) {
                 showAllQs();
-                displayQuestionlistMsg("Spørsmål slettet");
-            },
-             function (response) {
-                 alert("error: " + response.status + " " + response.data)
-             })
-
+            }, function (response) {
+                alert("error: " + response.status + " " + response.data)
+            })
     }
 
+    /************ PendingQuestions ************/
 
+    // PendingQuestions - get (all)
+    $scope.GetAllPendingQuestions = function () {
+        $http.get(urlQuestionApi)
+            .then(function (response) {
+                $scope.pendingQuestions = response.data;
+            }
+        );
+    }
+
+    // PendingQuestion - post
+    $scope.sendQuestion = function () {
+        var pendingQuestion = {
+            Question: $scope.question,
+            Email: $scope.email
+        };
+
+        $http.post(urlQuestionApi, pendingQuestion)
+            .then(function (response) {
+                $scope.pendingQuestions = response.data;
+                $scope.sendStatusMessage = "Spørsmålet ble sendt";
+                $scope.sendStatusClass = "text-success"
+
+                $scope.question = "";
+                $scope.email = "";
+                $scope.formQuestion.$setPristine();
+            }, function (response) {
+                $scope.sendStatusMessage = "Feil ved innsending";
+                $scope.sendStatusClass = "text-danger"
+            });
+        $scope.attemptSend = true;
+    }
+
+    // PendingQuestion - put
     $scope.saveAnswer = function () {
         $scope.showQuestions = true;
         $scope.showAnswerQuestion = false;
@@ -164,6 +129,59 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
 
     }
 
+    // PendingQuestion - delete
+    $scope.deleteQuestion = function (question) {
+        $http.delete(urlQuestionApi + question.Id)
+            .then(function (response) {
+                showAllQs();
+                displayQuestionlistMsg("Spørsmål slettet");
+            },
+             function (response) {
+                 alert("error: " + response.status + " " + response.data)
+             })
+
+    }
+
+
+
+    /************ Categories ************/
+
+    // Categories - get (all)
+    $scope.GetAllCategories = function () {
+        $http.get(urlCategoryApi)
+            .then(function (response) {
+                $scope.categories = response.data;
+            }, function (response) {
+                alert(data);
+            });
+    }
+
+    // Category - get (list of faqs in )
+    $scope.showCategoryFAQs = function (categoryid) {
+        $http.get(urlCategoryApi + categoryid)
+            .then(function (response) {
+                $scope.faqs = response.data;
+            },
+             function (response) {
+                 alert("error: " + response.status + " " + response.data)
+             })
+    }
+
+
+    /************ MISC ************/
+
+    $scope.answerQuestion = function (question) {
+        $scope.handleQuestion = question;
+
+        $scope.showQuestions = false;
+        $scope.showAnswerQuestion = true;
+
+    }
+
+
+
+
+
     $scope.cancelSave = function () {
         $scope.handleQuestion = null;
         $scope.showQuestions = true;
@@ -171,20 +189,39 @@ app.controller("FAQCtrl", ["$scope", "$http", function ($scope, $http) {
         displayQuestionlistMsg("Ingen endringer");
     }
 
-    $scope.deleteFAQ = function (faq) {
-        $http.delete(urlFAQApi + faq.Id)
-            .then(function (response) {
-                showAllQs();
-            }, function (response) {
-                alert("error: " + response.status + " " + response.data)
-            })
-    }
+
 
     $scope.editFAQ = function (faq) {
-
+        $scope.test();
     }
 
     $scope.saveFAQ = function (faq) {
 
     }
+
+    $scope.test = function () {
+        alert("test");
+    }
+
+    /************ List ************/
+
+    function showAllQs() {
+
+        $scope.GetAllFAQs();
+        $scope.loadingFAQ = false;
+        $scope.showFaqs = true;
+
+        $scope.GetAllPendingQuestions();
+        $scope.loadingQuestions = false;
+        $scope.showQuestions = true;
+
+    }
+    function showCategories() {
+        $scope.GetAllCategories();
+        $scope.loadingCategories = false;
+        $scope.showCategories = true;
+
+    }
+    showAllQs();
+    showCategories();
 }])
