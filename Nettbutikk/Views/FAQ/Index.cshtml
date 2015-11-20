@@ -59,7 +59,7 @@
                                         {{faq.Question}}
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-1">
 
                                 </div>
                             </div>
@@ -100,16 +100,13 @@
         <div class="col-md-4">
             <div class="panel panel-info divListUserQuestions">
                 <div class="panel-heading">
-                    <h4 style="display:inline-block" onclick="displayQuestionlistMsg('lagret')">
+                    <h4 style="display:inline-block">
                         Venter på svar
                     </h4>
-                    <div class="boxHidden">
-                        <div id="divAdminQuestionlistMessage" class="adminQuestionlistMessage text-center text-danger">
-                            <span class="adminQuestionlistMessage"></span>
-                            <span>&nbsp;</span>
-                            <span id="adminQuestionlistMessageClose" class="glyphicon glyphicon-ok text-success pointer"></span>
-                        </div>
+                    <div id="divAdminQuestionlistMessage">
+                        <div id="adminQuestionlistMessage" class="text-danger">test</div>
                     </div>
+
                     <h4 class="pull-right" ng-show="loadingQuestions" style="display:inline-block">
                         Henter data...
                     </h4>
@@ -233,11 +230,10 @@
     })
 
     function displayQuestionlistMsg(message) {
-        var elem = $("#divAdminQuestionlistMessage");
-        var box = elem.closest(".boxHidden");
-        var msg = elem.find(".adminQuestionlistMessage");
+        var box = $("#divAdminQuestionlistMessage");
+        var elem = box.find("#adminQuestionlistMessage");
 
-        msg.text(message);
+        elem.text(message);
 
         var leaveTime = 2000;
         $("#adminQuestionlistMessageClose").click(function () {
@@ -257,7 +253,7 @@
             elem.removeClass("leaveLeft");
             elem.addClass("enterLeft");
 
-        },200)
+        }, 200)
 
         setTimeout(function () {
             elem.removeClass("enterLeft");
@@ -268,6 +264,46 @@
                 box.addClass("leaveTop")
             }, 300);
         }, leaveTime);
-        
+
     }
+
+
+    //function displayQuestionlistMsg(message) {
+    //    var elem = $("#divAdminQuestionlistMessage");
+    //    var box = elem.closest(".boxHidden");
+    //    var msg = elem.find(".adminQuestionlistMessage");
+
+    //    msg.text(message);
+
+    //    var leaveTime = 2000;
+    //    $("#adminQuestionlistMessageClose").click(function () {
+    //        elem.removeClass("enterLeft");
+    //        elem.addClass("leaveLeft");
+
+    //        setTimeout(function () {
+    //            box.removeClass("enterTop")
+    //            box.addClass("leaveTop")
+    //        }, 300);
+    //        return;
+    //    })
+
+    //    box.removeClass("leaveTop")
+    //    box.addClass("enterTop")
+    //    setTimeout(function () {
+    //        elem.removeClass("leaveLeft");
+    //        elem.addClass("enterLeft");
+
+    //    }, 200)
+
+    //    setTimeout(function () {
+    //        elem.removeClass("enterLeft");
+    //        elem.addClass("leaveLeft");
+
+    //        setTimeout(function () {
+    //            box.removeClass("enterTop")
+    //            box.addClass("leaveTop")
+    //        }, 300);
+    //    }, leaveTime);
+
+    //}
 </script>
