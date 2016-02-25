@@ -8,10 +8,19 @@
 <div class="categories">
     <ul class="category-list">
         @foreach (var category in categories)
+        {
+            if (category.CategoryName == ViewBag.CategoryName)
             {
-            <li class="category-listitem">
-                @Html.ActionLink(category.CategoryName, "Category", "Home", new { @CategoryId = category.CategoryId }, null)
-            </li>
+                <li class="category-listitem">
+                    @Html.ActionLink(category.CategoryName, "Category", "Home", new { @CategoryId = category.CategoryId }, new { @class = "active" })
+                </li>
+            }
+            else
+            {
+                <li class="category-listitem">
+                    @Html.ActionLink(category.CategoryName, "Category", "Home", new { @CategoryId = category.CategoryId }, null)
+                </li>
+            }
 
         }
     </ul>
